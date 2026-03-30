@@ -55,11 +55,11 @@ namespace Stugan.Core
 
             switch (tangent)
             {
-                case ConsoleKey.I:
+                /*case ConsoleKey.I:
                     // Ryggsäckens innehåll + rumsbeskrivning
                     output = _spelare.Ryggsack.Visa(_spelare, _story);
                     output += "\n" + _spelare.NuvarandeRum.VisaBeskrivning();
-                    break;
+                    break;*/
 
                 case ConsoleKey.S:
                     // Status-skärmen
@@ -73,16 +73,16 @@ namespace Stugan.Core
                     output += _spelare.NuvarandeRum.UndersokRum(_spelare, _story);
                     break;
 
-                case ConsoleKey.O:
+                /*case ConsoleKey.O:
                     // "O" för Objekt - hämtar listan från Rum.cs
                     output = _spelare.NuvarandeRum.VisaObjektLista(_spelare, _story);
-                    break;
+                    break;*/
 
-                case ConsoleKey.T:
+                /*case ConsoleKey.T:
                     // Här anropas din metod för att plocka upp saker
                     // (Se till att TaUppSak returnerar en sträng nu!)
                     output = TaUppSak();
-                    break;
+                    break;*/
 
                 case ConsoleKey.B:
                     // Lång beskrivning av rummet

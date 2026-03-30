@@ -10,7 +10,7 @@ namespace Stugan
         public Form1()
         {
             InitializeComponent();
-
+            this.Text = "Stugan";
             motor = new Spelmotor();
 
             rtbDisplay = new RichTextBox();
