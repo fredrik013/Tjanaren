@@ -1,6 +1,6 @@
 ﻿namespace Stugan
 {
-    partial class Stugan
+    partial class Form1
     {
         /// <summary>
         ///  Required designer variable.

@@ -2,12 +2,12 @@ using Stugan.Core;
 
 namespace Stugan
 {
-    public partial class Stugan : Form
+    public partial class Form1 : Form
     {
         RichTextBox rtbDisplay;
         Spelmotor motor;
 
-        public Stugan()
+        public Form1()
         {
             InitializeComponent();
 
@@ -16,19 +16,21 @@ namespace Stugan
             rtbDisplay = new RichTextBox();
             rtbDisplay.Dock = DockStyle.Fill;
             rtbDisplay.ReadOnly = true;
-            rtbDisplay.Font = new Font("Consolas", 12); // Consolas känns lite "retro/konsol"
+            rtbDisplay.Font = new Font("Consolas", 12);
+            this.Controls.Add(rtbDisplay);
 
             string startHalsning = motor.HamtaStartText();
 
-            this.Controls.Add(rtbDisplay);
-
-
-            // Skriv ut den första hälsningen direkt
+            // Skriv ut den första hälsningen - lade till \n för tydlighet
             rtbDisplay.AppendText("Systemet startat...\n");
-            rtbDisplay.AppendText("Välkommen till Stugan Lab.");
+            rtbDisplay.AppendText("Välkommen till Stugan Lab.\n\n"); // Dubbel radbrytning här
             rtbDisplay.AppendText(startHalsning + "\n");
-            this.KeyPreview = true; // Gör att fönstret ser tangenttryck först
-            this.KeyDown += Form1_KeyDown; // Koppla ihop trycket med en metod
+
+            this.KeyPreview = true;
+            this.KeyDown += Form1_KeyDown;
+
+            // Se till att markören hamnar i rutan direkt så JAWS hittar texten
+            rtbDisplay.Focus();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

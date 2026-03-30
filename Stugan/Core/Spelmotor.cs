@@ -15,13 +15,32 @@ namespace Stugan.Core
         {
             _story = new StoryState();
             _worldMap = new WorldMap();
-            // Starta spelaren i Hallen (Position 0,0,0)
-            _spelare = new Spelare(_worldMap.HamtaRum(new Position(0, 0, 0)));
+
+            // HÄR ÄR FIXEN: 
+            // Vi säger åt motorn att använda metoden som finns i klassen Rumskarta
+            Rum startRum = Rumskarta.SkapaVarlden(_worldMap, _story);
+
+            // Nu har vi startRum och kan initiera spelaren
+            _spelare = new Spelare(startRum);
         }
 
         public string HamtaStartText()
         {
-            return "Du står utanför stugan. Regnet piskar mot ansiktet.";
+            // Vi använder en StringBuilder eller bara vanlig sträng-konkatenering
+            string intro = "--- TJÄNARE HOS HERRSKAPET VON KRÅNGEL ---\n\n";
+            intro += "Välkommen till Stugan.\n";
+            intro += "Regnet piskar mot nacken när du står utanför den gamla träbyggnaden.\n";
+            intro += "Du har blivit anställd för att städa upp efter familjen Von Krångel,\n";
+            intro += "men de dömande blickarna från fönstren antyder att de förväntar sig underverk.\n\n";
+
+            intro += "Du känner tyngden av ryggsäcken på ryggen,\n";
+            intro += "och dina boots är ordentligt snörade på fötterna – bäst att inte smutsa ner finmattorna...\n";
+            intro += "\n--------------------------------------------------\n\n";
+
+            // Slutligen lägger vi till rumsbeskrivningen för startrummet (Gårdsplanen)
+            intro += _spelare.NuvarandeRum.VisaBeskrivning();
+
+            return intro;
         }
 
         public string HamtaInventoryTest()
@@ -31,30 +50,76 @@ namespace Stugan.Core
 
         public string HanteraInmatning(ConsoleKey tangent)
         {
-            // Vi skapar en variabel för att samla upp texten som ska visas
+            // Vi samlar all text i denna sträng för att visa i rtbDisplay
             string output = "";
 
             switch (tangent)
             {
                 case ConsoleKey.I:
-                    // Här behöver Ryggsack.Visa returnera en string i framtiden
-                    output = "Du tittar i ryggsäcken...\n";
-                    output += _spelare.NuvarandeRum.VisaBeskrivning();
+                    // Ryggsäckens innehåll + rumsbeskrivning
+                    output = _spelare.Ryggsack.Visa(_spelare, _story);
+                    output += "\n" + _spelare.NuvarandeRum.VisaBeskrivning();
                     break;
 
                 case ConsoleKey.S:
+                    // Status-skärmen
                     output = _spelare.VisaStatus(_story);
-                    output += "\n(Tryck på valfri tangent för att återgå)";
+                    output += "\n\nTryck på valfri tangent för att återgå till rummet...";
+                    // I Form1 rensas texten vid nästa knapptryck, så detta fungerar som din gamla ReadKey
+                    break;
+
+                case ConsoleKey.U:
+                    output = $"\nDu ser dig noga omkring i {_spelare.NuvarandeRum.Namn}...\n";
+                    output += _spelare.NuvarandeRum.UndersokRum(_spelare, _story);
+                    break;
+
+                case ConsoleKey.O:
+                    // "O" för Objekt - hämtar listan från Rum.cs
+                    output = _spelare.NuvarandeRum.VisaObjektLista(_spelare, _story);
+                    break;
+
+                case ConsoleKey.T:
+                    // Här anropas din metod för att plocka upp saker
+                    // (Se till att TaUppSak returnerar en sträng nu!)
+                    output = TaUppSak();
+                    break;
+
+                case ConsoleKey.B:
+                    // Lång beskrivning av rummet
+                    output = _spelare.NuvarandeRum.LasLangBeskrivning();
+                    break;
+
+                case ConsoleKey.M:
+                    // Underhåll (t.ex. starta tvättmaskinen eller laga rör)
+                    output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
                     break;
 
                 case ConsoleKey.UpArrow:
                     output = FlyttaSpelare("Norr");
                     break;
 
-                // ... och så vidare för alla dina case ...
+                case ConsoleKey.DownArrow:
+                    output = FlyttaSpelare("Soder");
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    output = FlyttaSpelare("Oster");
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    output = FlyttaSpelare("Vaster");
+                    break;
+
+                case ConsoleKey.PageUp:
+                    output = FlyttaSpelare("Upp");
+                    break;
+
+                case ConsoleKey.PageDown:
+                    output = FlyttaSpelare("Ner");
+                    break;
 
                 default:
-                    output = "Den tangenten gör inget just nu.";
+                    output = _spelare.NuvarandeRum.VisaBeskrivning();
                     break;
             }
 
