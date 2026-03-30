@@ -30,13 +30,14 @@
         {
             SuspendLayout();
             // 
-            // Stugan
+            // Form1
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Name = "Stugan";
-            Text = "Form1";
+            ClientSize = new Size(560, 270);
+            Margin = new Padding(2, 2, 2, 2);
+            Name = "Form1";
+            Text = "Stugan";
             ResumeLayout(false);
         }
 

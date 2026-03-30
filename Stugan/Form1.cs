@@ -10,7 +10,7 @@ namespace Stugan
         public Form1()
         {
             InitializeComponent();
-            this.Text = "Stugan";
+
             motor = new Spelmotor();
 
             rtbDisplay = new RichTextBox();
@@ -22,8 +22,7 @@ namespace Stugan
             string startHalsning = motor.HamtaStartText();
 
             // Skriv ut den första hälsningen - lade till \n för tydlighet
-            rtbDisplay.AppendText("Systemet startat...\n");
-            rtbDisplay.AppendText("Välkommen till Stugan Lab.\n\n"); // Dubbel radbrytning här
+
             rtbDisplay.AppendText(startHalsning + "\n");
 
             this.KeyPreview = true;
