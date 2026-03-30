@@ -1,4 +1,5 @@
-﻿using Stugan.Rooms;
+﻿using Stugan.Modeller;
+using Stugan.Rooms;
 
 namespace Stugan.Core
 {
@@ -65,8 +66,9 @@ namespace Stugan.Core
         {
             // Vi skapar en lokal variabel för att samla upp texten istället för WriteLine
             string logg = "";
+            string exitText;
 
-            bool visadeExit = _spelare.NuvarandeRum.VisaExitMeddelande(riktning);
+            bool visadeExit = _spelare.NuvarandeRum.VisaExitMeddelande(riktning, out exitText);
 
             if (_spelare.NuvarandeRum.Utgangar.ContainsKey(riktning))
             {
@@ -121,6 +123,31 @@ namespace Stugan.Core
             }
 
             return logg;
+        }
+
+        // Denna anropas fortfarande av case ConsoleKey.T
+        public List<Spelsak> TaUppSak()
+        {
+            // Vi hämtar de saker som går att ta
+            var sakerAttTa = _spelare.NuvarandeRum.SakerIRummet
+                .Where(s => s.KanPlockasUpp && !s.ArGomd)
+                .ToList();
+
+            // Vi returnerar listan direkt till Form1. 
+            // Om listan är tom, vet fönstret att det inte finns något att plocka upp.
+            return sakerAttTa;
+        }
+
+        // En ny liten hjälpreda som faktiskt flyttar saken när du valt i listan
+        public string VerkstallUpplockning(Spelsak valdSak)
+        {
+            if (valdSak != null)
+            {
+                _spelare.Ryggsack.LaggTill(valdSak);
+                _spelare.NuvarandeRum.SakerIRummet.Remove(valdSak);
+                return $"\nDu plockar upp: {valdSak.Namn}.";
+            }
+            return "\nInget valdes.";
         }
     }
 }

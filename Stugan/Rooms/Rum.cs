@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -89,81 +88,94 @@ namespace Stugan.Rooms
             return Utgangar.TryGetValue(riktning, out var rum) ? rum : null;
         }
 
-        public bool VisaExitMeddelande(string riktning)
+        public bool VisaExitMeddelande(string riktning, out string exitText)
         {
-            // Vi hämtar meddelandet från oss själva (detta rum)
-            // Vi skickar in riktningen till vår egen Hamta-metod som sköter ToUpper
+            exitText = ""; // Vi börjar med en tom text
             string? meddelande = HamtaUtgangsMeddelande(riktning);
 
             if (!string.IsNullOrEmpty(meddelande))
             {
-                Clear();
-                WriteLine($"\n{meddelande}");
+                // Istället för Clear och WriteLine, sparar vi texten i vår "ut-variabel"
+                exitText = $"\n{meddelande}\n";
 
-                // JAWS-vänlig paus
-                Thread.Sleep(2000);
+                // Vi skippar Thread.Sleep här eftersom fönstret inte ska låsa sig
                 return true;
             }
 
             return false;
         }
 
-        public void VisaBeskrivning(bool redanRensat = false)
+        public string VisaBeskrivning(bool redanRensat = false)
         {
-            if (!redanRensat)
-            {
-                Clear();
-            }
+            // Vi skapar en variabel för att samla upp all text
+            string output = "";
 
-            // HÄR ÄR DIN ORIGINALKOD - HELT OFÖRÄNDRAD:
-            WriteLine($"{Namn}");
+            // Istället för Clear() lägger vi till en tom rad om det behövs, 
+            // men i WinForms sköter fönstret oftast rensningen själv.
+            output += $"{Namn}\n";
 
             // 1. Grundbeskrivningen av rummet
             if (!HarBesokts)
             {
-                Thread.Sleep(300);
-                WriteLine($"{Beskrivning}");
-                WriteLine(HamtaUtgangarBeskrivning());
+                // Vi skippar Thread.Sleep(300) – det behövs inte i fönstret 
+                // och skulle bara få programmet att se ut som om det "hängt sig"
+                output += $"{Beskrivning}\n";
+                output += HamtaUtgangarBeskrivning() + "\n";
                 HarBesokts = true;
             }
             else
             {
-                Thread.Sleep(300);
-                WriteLine($"Du är {VisaNamn}.");
-                WriteLine(HamtaUtgangarBeskrivning());
+                output += $"Du är {VisaNamn}.\n";
+                output += HamtaUtgangarBeskrivning() + "\n";
             }
-            VisaSakerIRummet();
+
+            // Vi anropar VisaSakerIRummet och lägger till dess text i vår output
+            output += VisaSakerIRummet();
+
+            return output;
         }
 
         // 2. Hitta saker som ligger framme och går att ta
         // Vi filtrerar bort de som är gömda (ArGomd == true)
-        private void VisaSakerIRummet()
+        private string VisaSakerIRummet()
         {
             var synligaSaker = SakerIRummet.Where(s => s.KanPlockasUpp && !s.ArGomd).ToList();
+            string text = "";
 
             if (synligaSaker.Count > 0)
             {
-                WriteLine("Här ser du också:");
+                // Vi lägger till en extra radbrytning i början för att få luft i fönstret
+                text += "\nHär ser du också:\n";
                 foreach (var sak in synligaSaker)
                 {
-                    WriteLine(sak.Namn);
+                    text += $"{sak.Namn}\n";
                 }
             }
+
+            return text;
         }
 
-        public void LasLangBeskrivning()
+        public string LasLangBeskrivning()
         {
-            Clear();
-            WriteLine($"{VisaNamn}");
-            WriteLine(Beskrivning);
-            VisaSakerIRummet();
+            // Vi byter ut Clear() mot att börja på en fräsch sträng
+            string output = $"{VisaNamn}\n";
+
+            output += $"{Beskrivning}\n";
+
+            // Vi lägger till utgångarna också, så man inte går vilse efter att ha läst
+            output += HamtaUtgangarBeskrivning() + "\n";
+
+            // Och så anropar vi den nu sträng-returnerande VisaSakerIRummet()
+            output += VisaSakerIRummet();
+
+            return output;
         }
 
-        public virtual void UndersokRum(Spelare spelare, StoryState story)
+        public virtual string UndersokRum(Spelare spelare, StoryState story)
         {
-            // Som standard i basklassen ger vi bara en allmän beskrivning av rummets atmosfär.
-            // Inga menyer, inga listor – bara text.
-            WriteLine("Det verkar inte vara något som sticker ut just nu vid en snabb anblick.");
+            // Vi returnerar bara texten istället för att köra WriteLine.
+            // Inga menyer, inga listor – bara ren text som skickas till motorn.
+            return "Det verkar inte vara något som sticker ut just nu vid en snabb anblick.";
         }
 
         public virtual bool KanGaIn(Spelare s, StoryState story)
@@ -171,63 +183,42 @@ namespace Stugan.Rooms
             return true; // Standard: Alla får komma in!
         }
 
-        public virtual void ReageraPaHandling(string handling)
+        public virtual string ReageraPaHandling(string handling)
         {
-            // Som standard händer absolut ingenting här.
+            // Som standard händer absolut ingenting här, 
+            // så vi returnerar en tom sträng eller ett neutralt besked.
+            return "";
         }
 
         // I Rum.cs
-        public virtual void UtforUnderhall(Spelare spelare, StoryState story)
+        public virtual string UtforUnderhall(Spelare spelare, StoryState story)
         {
-            // Som standard händer ingenting speciellt.
-            WriteLine("\nDet finns inget här som behöver underhållas just nu.");
+            // Vi returnerar standardtexten istället för att skriva ut den
+            return "\nDet finns inget här som behöver underhållas just nu.";
         }
 
         // Denna metod är fast och körs likadant för alla rum, 
         // vilket gör att vi slipper rums-specifika utskällningar när vi bara vill se objekten.
-        public void VisaObjektLista(Spelare spelare, Core.StoryState story)
+        public List<Spelsak> VisaObjektLista()
         {
-            // Vi filtrerar bort gömda saker direkt
-            var saker = SakerIRummet.Where(s => !s.ArGomd).ToList();
+            // Vi filtrerar bara fram det som faktiskt syns
+            return SakerIRummet.Where(s => !s.ArGomd).ToList();
+        }
 
-            if (saker.Count == 0)
+        // En ny hjälpmetod som ger beskrivningen av en specifik sak när man valt den i listan
+        public string UndersokValdSak(Spelsak valdSak, Spelare spelare)
+        {
+            if (valdSak == null) return "";
+
+            string output = $"--- {valdSak.Namn.ToUpper()} ---\n";
+            output += $"{valdSak.Beskrivning}\n";
+
+            if (valdSak.KanPlockasUpp && !spelare.Ryggsack.HarForemal(valdSak.Namn))
             {
-                WriteLine("\nDet finns inget särskilt att undersöka här.");
-                Thread.Sleep(1000);
-                return;
+                output += $"\n(Du kan försöka plocka upp {valdSak.Namn.ToLower()} om du vill.)";
             }
 
-            Clear();
-            WriteLine($"--- OBJEKT I {Namn.ToUpper()} ---");
-            WriteLine("Vad vill du titta närmare på?");
-
-            for (int i = 0; i < saker.Count; i++)
-            {
-                WriteLine($"{i + 1}. {saker[i].Namn}");
-            }
-            WriteLine($"{saker.Count + 1}. Gå tillbaka");
-
-            // Läs in valet
-            var info = ReadKey(true);
-            if (int.TryParse(info.KeyChar.ToString(), out int index) && index >= 1 && index <= saker.Count)
-            {
-                var valdSak = saker[index - 1];
-
-                Clear();
-                WriteLine($"--- {valdSak.Namn.ToUpper()} ---");
-                WriteLine(valdSak.Beskrivning);
-
-                if (valdSak.KanPlockasUpp && !spelare.Ryggsack.HarForemal(valdSak.Namn))
-                {
-                    WriteLine($"\n(Du kan försöka plocka upp {valdSak.Namn.ToLower()} om du vill.)");
-                }
-
-                WriteLine("\nTryck på valfri tangent för att fortsätta...");
-                ReadKey(true);
-
-                // Visa rumsbeskrivningen igen så man hittar tillbaka
-                VisaBeskrivning(false);
-            }
+            return output;
         }
     }
 }

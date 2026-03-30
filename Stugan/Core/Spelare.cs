@@ -1,6 +1,5 @@
 ﻿using Stugan.Modeller.Saker;
 using Stugan.Rooms;
-using static System.Console;
 
 namespace Stugan.Core
 {
@@ -73,19 +72,18 @@ namespace Stugan.Core
             }
         }
 
-        public void VisaStatus(StoryState story)
+        public string VisaStatus(StoryState story)
         {
-            WriteLine();
-            WriteLine("--- DIN STATUS ---");
+            // Vi skapar en variabel för att bygga upp status-texten
+            string statusText = "\n--- DIN STATUS ---\n";
 
             // Hälsa
-            WriteLine(ArSkadad ? "Mående: Du är skadad och rör dig tungt." : "Mående: Du känner dig pigg och oskadd.");
+            statusText += (ArSkadad ? "Mående: Du är skadad och rör dig tungt." : "Mående: Du känner dig pigg och oskadd.") + "\n";
 
             // Hitta aktiva kläder i ryggsäcken
             var allaKlader = Ryggsack.GetAllaSaker().OfType<Klader>().Where(k => k.ArAktiv).ToList();
 
             string huvud = allaKlader.FirstOrDefault(k => k.Placering == Kroppsdel.Huvud)?.Namn ?? "inget";
-
             string hander = allaKlader.FirstOrDefault(k => k.Placering == Kroppsdel.Hand)?.Namn ?? "inget";
 
             var kroppsPlagg = allaKlader
@@ -101,15 +99,18 @@ namespace Stugan.Core
                     .ToList();
 
             string fotter = fotPlagg.Count > 0 ? string.Join(", ", fotPlagg) : "inget (barfota)";
-            WriteLine($"På huvudet: {huvud}");
-            WriteLine($"På händerna: {hander}");
-            WriteLine($"På kroppen: {kropp}");
-            WriteLine($"På fötterna: {fotter}");
 
-            WriteLine("------------------");
-            WriteLine($"Uppdrag: {story.GetStatusBeskrivning()}");
-            WriteLine("------------------");
-            WriteLine();
+            // Lägg till klädinfon i strängen
+            statusText += $"På huvudet: {huvud}\n";
+            statusText += $"På händerna: {hander}\n";
+            statusText += $"På kroppen: {kropp}\n";
+            statusText += $"På fötterna: {fotter}\n";
+
+            statusText += "------------------\n";
+            statusText += $"Uppdrag: {story.GetStatusBeskrivning()}\n";
+            statusText += "------------------\n";
+
+            return statusText;
         }
     }
 }
