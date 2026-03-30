@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -15,83 +14,80 @@ namespace Stugan.Rooms
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
-            // Vi hämtar ALLA aktiva skyddskläder en gång för alla
+            // Vi hämtar de aktiva skyddskläderna
             var aktivaSkydd = s.Ryggsack.GetAllaSaker()
                 .OfType<Klader>()
                 .Where(k => k.ArAktiv && k.Typ == Bekladnadstyp.Skydd)
                 .ToList();
 
-            // 1. "Naken-kontrollen" - har man inget skydd alls på sig?
+            // 1. "Naken-kontrollen"
             if (!aktivaSkydd.Any())
             {
-                WriteLine("Det ser farligt ut där inne. Du behöver nog någon form av skyddsutrustning.");
+                // Ingen text här längre – motorn sköter hindret
                 return false;
             }
 
-            // 2. Switchen kollar nu bara VAD som saknas i listan
+            // 2. Switchen kollar vad som saknas
             switch (true)
             {
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Fot):
-                    WriteLine("Du kan inte gå in där utan skydd på fötterna, det är alldeles för blött.");
-                    return false;
-
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Helakroppen):
-                    WriteLine("Du behöver skydd för kroppen innan du kliver in.");
-                    return false;
-
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Hand):
-                    WriteLine("Du kan inte gå in utan skydd för händerna.");
-                    return false;
+                    return false; // Stopp direkt om något saknas
 
                 default:
-                    // Om vi har något skydd (if-satsen ovan) och inget saknas i switchen...
-                    return true;
+                    return true; // Allt på plats!
             }
         }
 
-        public override void UndersokRum(Spelare spelare, StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
+            string output = "";
+
             if (story.RorArLagat)
             {
                 // Den "belönande" beskrivningen
-                WriteLine("\nLuften i pannrummet är nu klar och torr. Det lagade röret blänker svagt i ljuset.");
-                WriteLine("Det sjuder hemtrevligt från pannan och värmen sprider sig i rören.");
-                WriteLine("Här finns inget mer som behöver underhållas just nu.");
+                output += "\nLuften i pannrummet är nu klar och torr. Det lagade röret blänker svagt i ljuset.\n";
+                output += "Det sjuder hemtrevligt från pannan och värmen sprider sig i rören.\n";
+                output += "Här finns inget mer som behöver underhållas just nu.\n";
             }
             else
             {
                 // Hintens beskrivning (innan lagning)
-                WriteLine("\nDet läckande röret sprutar het ånga rätt ut i rummet.");
-                WriteLine("Det är uppenbart att anläggningen är i desperat behov av **underhåll** (M).");
-                WriteLine("Muttern sitter alldeles för hårt för att dras åt med bara händerna.");
+                output += "\nDet läckande röret sprutar het ånga rätt ut i rummet.\n";
+                output += "Det är uppenbart att anläggningen är i desperat behov av **underhåll** (M).\n";
+                output += "Muttern sitter alldeles för hårt för att dras åt med bara händerna.\n";
             }
+
+            return output;
         }
 
-        public override void UtforUnderhall(Spelare spelare, StoryState story)
+        public override string UtforUnderhall(Spelare spelare, Core.StoryState story)
         {
-            // Om röret redan är lagat finns det inget mer att undersöka här
+            string output = "";
+
+            // Om röret redan är lagat
             if (story.RorArLagat)
             {
-                WriteLine("\nDu ser det lagade röret. Det ser torrt och säkert ut nu.");
-                return;
+                return "\nDu ser det lagade röret. Det ser torrt och säkert ut nu.";
             }
 
-            // Vi kollar om spelaren har en AKTIV rörtång i handen
+            // Vi kollar om spelaren har en AKTIV rörtång
             var aktivRortang = spelare.Ryggsack.GetAllaSaker()
                 .OfType<Redskap>()
                 .FirstOrDefault(r => r.Namn == "Rörtång" && r.ArAktiv);
 
             if (aktivRortang != null)
             {
-                // Framgång! Spelaren har rörtången redo.
+                // Framgång!
                 story.RorArLagat = true;
 
                 // Vi uppdaterar rumsbeskrivningen permanent
                 this.Beskrivning = "Ett nu tyst och varmt pannrum. Röret är lagat och ångan har lagt sig.";
 
-                WriteLine("\nDu placerar rörtången runt den lösa kopplingen och tar i allt vad du orkar.");
-                WriteLine("Med ett metalliskt knarrande ger muttern med sig och dras åt.");
-                WriteLine("Det sista pysandet dör ut. Röret är lagat!");
+                output += "\nDu placerar rörtången runt den lösa kopplingen och tar i allt vad du orkar.\n";
+                output += "Med ett metalliskt knarrande ger muttern med sig och dras åt.\n";
+                output += "Det sista pysandet dör ut. Röret är lagat!\n";
             }
             else
             {
@@ -100,17 +96,19 @@ namespace Stugan.Rooms
 
                 if (harRortangMenInaktiv)
                 {
-                    WriteLine("\nDet sprutar ånga från en koppling som verkar sitta helt lös.");
-                    WriteLine("Du har visserligen en rörtång i ryggsäcken, men den gör ingen nytta där.");
-                    WriteLine("Du behöver nog ta fram den (Gör den aktiv) om du ska kunna dra åt muttern.");
+                    output += "\nDet sprutar ånga från en koppling som verkar sitta helt lös.\n";
+                    output += "Du har visserligen en rörtång i ryggsäcken, men den gör ingen nytta där.\n";
+                    output += "Du behöver nog ta fram den (Gör den aktiv) om du ska kunna dra åt muttern.\n";
                 }
                 else
                 {
-                    WriteLine("\nDet läckande röret sprutar het ånga rätt ut i rummet.");
-                    WriteLine("Muttern sitter alldeles för hårt för att dras åt med fingrarna.");
-                    WriteLine("Du behöver ett rejält verktyg – som en rörtång – för att få stopp på läckan.");
+                    output += "\nDet läckande röret sprutar het ånga rätt ut i rummet.\n";
+                    output += "Muttern sitter alldeles för hårt för att dras åt med fingrarna.\n";
+                    output += "Du behöver ett rejält verktyg – som en rörtång – för att få stopp på läckan.\n";
                 }
             }
+
+            return output;
         }
     }
 }

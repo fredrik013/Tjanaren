@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -23,34 +22,36 @@ namespace Stugan.Rooms
             });
         }
 
-        public override void UndersokRum(Spelare spelare, Core.StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
-            var rum = spelare.NuvarandeRum;
-            var brod = rum.SakerIRummet.FirstOrDefault(s => s.Namn == "Lunchbröd");
+            string output = "";
+            var brod = SakerIRummet.FirstOrDefault(s => s.Namn == "Lunchbröd");
 
             if (brod != null && brod.ArGomd)
             {
-                brod.ArGomd = false; // Nu dyker det upp i rummets lista!
-                WriteLine("\nDu undersöker det dukade bordet och ser bland annat ett brödfat som är täckt med en handduk.");
-                WriteLine("Du lyfter på handduken och hittar lunchbröd!");
+                brod.ArGomd = false; // Nu dyker det upp i rummets lista och JAWS ser det!
+                output += "\nDu undersöker det dukade bordet och ser bland annat ett brödfat som är täckt med en handduk.\n";
+                output += "Du lyfter på handduken och hittar lunchbröd!\n";
             }
             else
             {
-                WriteLine("\nKöket är rent och snyggt. Brödfatet står tomt på bordet.");
+                output += "\nKöket är rent och snyggt. Brödfatet står tomt på bordet.\n";
             }
+
+            // Vi returnerar texten så att fönstret kan visa den
+            return output;
         }
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
-            // Vi kollar om spelaren har på sig något av typen "Ute"
-            // Vi använder ToLower() för att vara säkra, ifall vi råkat skriva "ute" med litet u på något plagg.
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
-                WriteLine("Stopp! Du kan inte gå in i köket med uteskor, du smutsar ner det fina golvet!");
+                // Istället för WriteLine, låter vi Spelmotorn sköta snacket.
+                // Vi kan senare lägga till en egenskap i Rum som heter "HinderText" 
+                // om vi vill att JAWS ska förklara varför det tog stopp.
                 return false;
             }
 
-            // Om AktivtSkodon är "Inne" eller en tom sträng (barfota) släpps man förbi.
             return true;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -20,122 +19,120 @@ namespace Stugan.Rooms
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
+            // Vi behåller logiken att man faktiskt får gå in (return true),
+            // men vi tar bort konsol-interaktionen och väntandet.
+
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
-                WriteLine("\n[SYSTEMMEDDELANDE: MATTVÄKTARE 1.0 AKTIVERAD]");
-                WriteLine("När du sätter foten över den fläckfria tröskeln sprakar TV:n till med ett ljud som påminner om glas som krossas.");
-                WriteLine("Den raspiga rösten ekar nu direkt från bildröret, råare än i hallen:");
-
-                WriteLine("\n'...MINA PERSISKA MATTOR ÄR INTE TILL FÖR DINA LERIGA SULOR!...'");
-                WriteLine($"'...UT MED DIG! TA AV DIG DINA {s.AktivtSkodonNamn.ToUpper()} OCH KOM INTE TILLBAKA FÖRRÄN DU GÅR PÅ TÅ!...'");
-
-                WriteLine("\nDet flimrande ljuset från skärmen tycks jaga skuggorna mot dina fötter.");
-                WriteLine("Tryck på valfri tangent för att kliva in (på egen risk)...");
-                ReadKey(true);
+                // Här skulle vi i framtiden kunna trigga en flagga i storyn
+                // som gör att rummet "minns" att du smutsat ner mattan.
             }
 
-            // Vi släpper in dem ändå så att de får ta konsekvensen (doften) inne i rummet
+            // Vi släpper in dem så att de får ta konsekvenserna inne i rummet
             return true;
         }
 
-        public override void UndersokRum(Spelare spelare, Core.StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
+            string output = "";
             var rum = spelare.NuvarandeRum;
-            // Vi letar fortfarande efter TV-objektet för att veta om vi kan interagera
-            var tv = rum.SakerIRummet.FirstOrDefault(s => s.Namn.Equals("TV", StringComparison.OrdinalIgnoreCase));
+            var tv = SakerIRummet.FirstOrDefault(s => s.Namn.Equals("TV", StringComparison.OrdinalIgnoreCase));
 
+            // Vi kollar doften (här antar jag att luktarSvett är en variabel i rummet eller storyn)
             if (luktarSvett)
             {
-                WriteLine("\nDet vilar en tung, unken doft av fotsvett i rummet.");
+                output += "\nDet vilar en tung, unken doft av fotsvett i rummet.\n";
             }
-
 
             if (tv != null)
             {
-                WriteLine("\nDu går fram till den brusande TV:n.");
-                WriteLine("Genom det gråa flimret hörs en raspig röst:");
+                output += "\nDu går fram till den brusande TV:n.\n";
+                output += "Genom det gråa flimret hörs en raspig röst:\n";
 
                 if (!story.HarBlivitVarnadOmRor) // Om spelaren latat sig!
                 {
-                    WriteLine("Skärmen lyser upp i ett giftigt lila sken och volymen maxas:");
-                    WriteLine("\n'...SITT INTE HÄR OCH LATA DIG!...'");
-                    WriteLine("'...NER I KÄLLAREN OCH LAGA DET TRASIGA RÖRET, ANNARS JÄVLAR!...'");
+                    output += "Skärmen lyser upp i ett giftigt lila sken och volymen maxas:\n";
+                    output += "\n'...SITT INTE HÄR OCH LATA DIG!...'\n";
+                    output += "'...NER I KÄLLAREN OCH LAGA DET TRASIGA RÖRET, ANNARS JÄVLAR!...'\n";
                     story.HarBlivitVarnadOmRor = true;
-                    return; // Vi avbryter här så de inte får resten av tipsen förrän de jobbat lite!
+                    return output; // Vi avbryter här precis som i din originalkod
                 }
                 else
                 {
-                    // HÄR ÄR DEN NYA RENA LOGIKEN (Ingen hårdkodning av namn!)
-                    // HÄR ÄR DEN NYA RENA LOGIKEN (Nu helt synkad med din Enum!)
+                    // Synkat med din Enum precis som du ville!
                     switch (spelare.AktivtSkodon)
                     {
                         case var s when s == Bekladnadstyp.Ute.ToString():
-                            WriteLine("'...smutsen från utsidan följer dina steg... det gillas inte...'");
+                            output += "'...smutsen från utsidan följer dina steg... det gillas inte...'\n";
                             break;
 
                         case var s when s == Bekladnadstyp.Inne.ToString():
-                            WriteLine("'...mjuka steg... ett klokt val... men de räcker inte till alla... sök i källaren...'");
+                            output += "'...mjuka steg... ett klokt val... men de räcker inte till alla... sök i källaren...'\n";
                             break;
 
                         case var s when s == Bekladnadstyp.Skydd.ToString():
-                            WriteLine("'...stövlar av gummi... redo för vätan... men akta så du inte dränker minnet...'");
+                            output += "'...stövlar av gummi... redo för vätan... men akta så du inte dränker minnet...'\n";
                             break;
 
                         default:
-                            WriteLine("'...barfota och blöt... jag känner doften av instängda boots ända hit...'");
+                            output += "'...barfota och blöt... jag känner doften av instängda boots ända hit...'\n";
                             break;
                     }
 
-                    System.Threading.Thread.Sleep(500);
-                    WriteLine("'...bzzzzt... prata med läskamraten... bzzzzt...'");
+                    // Ingen Thread.Sleep här, vi bara lägger till texten direkt
+                    output += "\n'...bzzzzt... prata med läskamraten... bzzzzt...'\n";
                 }
             }
+
+            return output;
         }
 
-        public override void ReageraPaHandling(string handling)
+        public override string ReageraPaHandling(string handling)
         {
-            // Vi rensar bort ToLower här om vi vill vara strikta, 
-            // men eftersom detta ofta kommer från användarkommandon kan det vara kvar.
+            string output = "";
+
+            // Vi kör ToLower för att matcha användarens kommandon smidigt
             switch (handling.ToLower())
             {
                 case "vadra":
                     if (luktarSvett)
                     {
                         luktarSvett = false;
-                        WriteLine("\n[KORSDRAG]");
-                        WriteLine("Frisk luft strömmar in från glasverandan och sveper med sig den unkna doften ut.");
+                        output += "\n[KORSDRAG]\n";
+                        output += "Frisk luft strömmar in från glasverandan och sveper med sig den unkna doften ut.\n";
                     }
                     break;
 
-                // Vi använder interpolerade strängar för att matcha våra Enums exakt
+                // Vi matchar mot Enums, precis som du byggt det
                 case string h when h == $"pa_{Bekladnadstyp.Ute.ToString().ToLower()}":
-                    WriteLine("\n[TV:N SPRAKAR TILL]");
-                    WriteLine("'...smutsen från utsidan följer dina steg... det gillas inte...'");
+                    output += "\n[TV:N SPRAKAR TILL]\n";
+                    output += "'...smutsen från utsidan följer dina steg... det gillas inte...'\n";
                     break;
 
                 case string h when h == $"pa_{Bekladnadstyp.Inne.ToString().ToLower()}":
-                    WriteLine("\n[TV:N FLIMRAR TILL]");
-                    WriteLine("'...mjuka steg... ett klokt val... men sök vidare...'");
+                    output += "\n[TV:N FLIMRAR TILL]\n";
+                    output += "'...mjuka steg... ett klokt val... men sök vidare...'\n";
                     break;
 
                 case string h when h == $"av_{Bekladnadstyp.Ute.ToString().ToLower()}":
                     luktarSvett = true;
-                    WriteLine("\n[TV:N GER IFRÅN SIG ETT DISKRET PIP]");
-                    WriteLine("'...äntligen... men aromen av instängda fötter dröjer sig kvar...'");
-                    WriteLine("En lätt dimma av tveksam doft sprider sig från de varma bootsen.");
+                    output += "\n[TV:N GER IFRÅN SIG ETT DISKRET PIP]\n";
+                    output += "'...äntligen... men aromen av instängda fötter dröjer sig kvar...'\n";
+                    output += "En lätt dimma av tveksam doft sprider sig från de varma bootsen.\n";
                     break;
 
                 case string h when h == $"av_{Bekladnadstyp.Inne.ToString().ToLower()}":
-                    WriteLine("\n[TV:N KNÄPPER TILL]");
-                    WriteLine("Rummet känns plötsligt väldigt tyst när du tar av dig tofflorna.");
+                    output += "\n[TV:N KNÄPPER TILL]\n";
+                    output += "Rummet känns plötsligt väldigt tyst när du tar av dig tofflorna.\n";
                     break;
 
-                // Glöm inte skyddsskorna/gummistövlarna!
                 case string h when h == $"pa_{Bekladnadstyp.Skydd.ToString().ToLower()}":
-                    WriteLine("\n[TV:N BRUSAR UPPA]");
-                    WriteLine("'...gummi mot golv... du förbereder dig för djupet...'");
+                    output += "\n[TV:N BRUSAR UPPA]\n";
+                    output += "'...gummi mot golv... du förbereder dig för djupet...'\n";
                     break;
             }
+
+            return output;
         }
     }
 }

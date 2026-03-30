@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -16,35 +15,31 @@ namespace Stugan.Rooms
 
         }
 
-        public override void UtforUnderhall(Spelare spelare, StoryState story)
+        public override string UtforUnderhall(Spelare spelare, Core.StoryState story)
         {
-            Clear();
-            WriteLine("--- UNDERHÅLL I TVÄTTSTUGAN ---");
-            WriteLine("1. Starta tvättmaskinen");
+            string output = "";
 
-            // Nu använder vi den nya smidiga metoden!
+            // Vi kollar bootsen först eftersom de ofta är smutsiga efter trädgården
             if (spelare.Ryggsack.HarForemal("Boots"))
             {
-                WriteLine("2. Putsa dina smutsiga boots");
+                output += "\nDu tar fram borsten och putsar bort leran från dina boots.\n";
+                output += "De glänser nu som nya.\n";
             }
-            WriteLine("3. Avbryt");
 
-            var val = ReadKey(true);
-            if (val.Key == ConsoleKey.D1)
+            // Sedan kollar vi maskinen
+            if (!story.TvattmaskinArIgang)
             {
                 story.TvattmaskinArIgang = true;
-                WriteLine("\n[KLICK-SURRRRR]");
-                WriteLine("Maskinen låser luckan och börjar snurra. Vattnet väser i rören.");
+                output += "\n[KLICK-SURRRRR]\n";
+                output += "Du trycker på startknappen. Maskinen låser luckan och börjar snurra.\n";
+                output += "Vattnet väser i rören och tvättcykeln är igång.\n";
             }
-            else if (val.Key == ConsoleKey.D2 && spelare.Ryggsack.HarForemal("Boots"))
+            else
             {
-                WriteLine("\nDu tar fram borsten och putsar bort leran från dina boots.");
-                WriteLine("De glänser nu som nya.");
-                // Här kan vi flagga att de är rena om vi vill senare
+                output += "\nTvättmaskinen hummar redan troget. Den verkar vara mitt i ett program.\n";
             }
 
-            WriteLine("\nTryck på valfri tangent...");
-            ReadKey(true);
+            return output;
         }
     }
 }

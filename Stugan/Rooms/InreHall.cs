@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 namespace Stugan.Rooms
 {
     public class InreHall : Rum
@@ -15,43 +14,50 @@ namespace Stugan.Rooms
             { ArAktiv = true });
         }
 
-        public override void UndersokRum(Spelare spelare, Core.StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
-            base.UndersokRum(spelare, story);
-            var rum = spelare.NuvarandeRum;
+            // Vi skapar vår textbehållare
+            string output = "";
+
+            // Vi hämtar bas-beskrivningen om du vill ha med den (valfritt)
+            // output += base.UndersokRum(spelare, story) + "\n";
+
             var nyckel = SakerIRummet.Find(s => s.Namn.ToLower().Contains("nyckel"));
 
-            if (string.IsNullOrEmpty(spelare.AktivtSkodon) && !HarUndersokts)
+            // Logik för att hitta nyckeln barfota
+            if (string.IsNullOrEmpty(spelare.AktivtSkodonNamn) && !HarUndersokts)
             {
-                WriteLine("\nDen mjuka mattan kittlar skönt mellan dina bara tår. Plötsligt känner du något hårt.");
-                WriteLine("Du lyfter på mattkanten och hittar en rostig nyckel!");
-                nyckel.ArGomd = false;
+                output += "\nDen mjuka mattan kittlar skönt mellan dina bara tår. Plötsligt känner du något hårt.\n";
+                output += "Du lyfter på mattkanten och hittar en rostig nyckel!\n";
+
+                if (nyckel != null) nyckel.ArGomd = false;
                 story.HarNyckel = true;
                 HarUndersokts = true;
-                return; // Vi går ur här så vi inte får dubbla meddelanden från switchen
+
+                return output; // Vi returnerar direkt här, precis som din gamla kod gjorde
             }
 
-            // Vi switchar på typen, men hämtar namnet dynamiskt för texten
+            // Switch-satsen för olika skodon
+            // Vi kollar mot AktivtSkodonNamn eller typen
             switch (spelare.AktivtSkodon.ToLower())
             {
                 case "ute":
-                    WriteLine("\n[VARNING]");
-                    // Vi använder spelarens aktiva skodon-namn istället för "Boots"
-                    WriteLine($"Mörka lerfläckar från dina {spelare.AktivtSkodonNamn} breder ut sig på den ljusa mattan.");
-                    WriteLine("En röst viskar strängt: 'Vissa skor hör hemma på bron, inte på finmattan...'");
+                    output += "\n[VARNING]\n";
+                    output += $"Mörka lerfläckar från dina {spelare.AktivtSkodonNamn} breder ut sig på den ljusa mattan.\n";
+                    output += "En röst viskar strängt: 'Vissa skor hör hemma på bron, inte på finmattan...'\n";
                     break;
 
                 case "inne":
-                    WriteLine($"\nDina {spelare.AktivtSkodonNamn} glider ljudlöst över den mjuka mattan.");
-                    WriteLine($"Du förnimmer något under foten men sulorna på dina {spelare.AktivtSkodonNamn} är för tjocka för att du ska kunna veta vad det är.");
+                    output += $"\nDina {spelare.AktivtSkodonNamn} glider ljudlöst över den mjuka mattan.\n";
+                    output += $"Du förnimmer något under foten men sulorna på dina {spelare.AktivtSkodonNamn} är för tjocka för att du ska kunna veta vad det är.\n";
                     break;
 
-                case "":
-                    WriteLine("\nDen mjuka mattan kittlar skönt mellan dina bara tår.");
+                default: // Täcker in både barfota och annat
+                    output += "\nDen mjuka mattan kittlar skönt mellan dina bara tår.\n";
                     break;
             }
 
-
+            return output;
         }
     }
 }

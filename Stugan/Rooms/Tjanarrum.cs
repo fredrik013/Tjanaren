@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -42,23 +41,29 @@ namespace Stugan.Rooms
         "Du tar av dig finstrumporna."));
         }
 
-        public override void UndersokRum(Spelare spelare, StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
-            // 1. Kör baslogiken (visar rumsbeskrivningen)
+            string output = "";
 
-
-            // 2. Logiken som faktiskt "öppnar" garderoben och tar fram kläderna
+            // Logiken som faktiskt "öppnar" garderoben och tar fram kläderna
             var doldaSaker = SakerIRummet.Where(s => s.ArGomd).ToList();
 
             if (doldaSaker.Any())
             {
-                WriteLine("\nDu öppnar garderoben. Där inne hänger dina finkläder, prydligt upphängda.");
+                output += "\nDu öppnar garderoben. Där inne hänger dina finkläder, prydligt upphängda.\n";
 
                 foreach (var sak in doldaSaker)
                 {
-                    sak.ArGomd = false; // Nu blir de synliga och går att 'ta'
+                    sak.ArGomd = false; // Nu blir de synliga och dyker upp i objektlistan!
                 }
             }
+            else
+            {
+                // Om man redan har öppnat garderoben kan vi ge en liten bekräftelse
+                output += "\nGarderoben står öppen och du ser galgarna där dina finkläder hängde.\n";
+            }
+
+            return output;
         }
     }
 }

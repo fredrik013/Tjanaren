@@ -41,34 +41,38 @@ namespace Stugan.Rooms
             return true;
         }
 
-        public override void UndersokRum(Spelare spelare, Core.StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
-            var rum = spelare.NuvarandeRum;
+            string output = "";
             var plasttofflor = SakerIRummet.Find(s => s.Namn.ToLower().Contains("tofflor"));
 
             if (!HarUndersokts)
             {
-                plasttofflor.ArGomd = false;
-                WriteLine("\nDu rotar bland de få sakerna i skohyllan...");
-                WriteLine("Där, längst in under en gammal tidning, hittar du ett par blå plasttofflor!");
+                // Logiken är intakt: Vi gör tofflorna synliga
+                if (plasttofflor != null) plasttofflor.ArGomd = false;
+
+                output += "\nDu rotar bland de få sakerna i skohyllan...\n";
+                output += "Där, längst in under en gammal tidning, hittar du ett par blå plasttofflor!\n";
                 HarUndersokts = true;
 
-                // Här kan vi "skryta" lite med vår nya prop
                 if (plasttofflor is Klader k && k.SkyddarMotVatten)
                 {
-                    WriteLine("De ser ut att tåla både fukt och lort – perfekta för källaren.");
+                    output += "De ser ut att tåla både fukt och lort – perfekta för källaren.\n";
                 }
             }
             else
             {
-                // En lite mer beskrivande text om man letar igen
-                WriteLine("\nDu ser inget mer av värde i skohyllan, bara lite grus och dammråttor.");
+                output += "\nDu ser inget mer av värde i skohyllan, bara lite grus och dammråttor.\n";
 
+                // Vi kollar aktivt skodon via spelaren
                 if (spelare.AktivtSkodon.ToLower() == "ute")
                 {
-                    WriteLine("Du ser att dina boots har lämnat leriga spår på det rena golvet. Aj då.");
+                    output += "Du ser att dina boots har lämnat leriga spår på det rena golvet. Aj då.\n";
                 }
             }
+
+            // HÄR ÄR RÄDDNINGEN: Vi returnerar hela strängen till spelmotorn
+            return output;
         }
     }
 }

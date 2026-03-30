@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -16,13 +15,14 @@ namespace Stugan.Rooms
             SakerIRummet.Add(new Redskap("Rörtång", "En tung och lite rostig rörtång. Perfekt för trilskande rör.", true, true));
         }
 
-        public override void UndersokRum(Spelare spelare, StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
+            string output = "";
             var rortang = SakerIRummet.FirstOrDefault(s => s.Namn == "Rörtång");
 
             if (rortang != null && rortang.ArGomd)
             {
-                // HÄR ÄR FIXEN: Vi kollar om spelaren har en AKTIV spade
+                // Vi kollar om spelaren har en AKTIV spade
                 var aktivSpade = spelare.Ryggsack.GetAllaSaker()
                     .OfType<Redskap>()
                     .FirstOrDefault(r => r.Namn == "Spade" && r.ArAktiv);
@@ -31,63 +31,51 @@ namespace Stugan.Rooms
                 {
                     rortang.ArGomd = false;
                     story.HarHittatRortang = true;
-                    WriteLine("\nDu greppar tag i spaden och sätter bladet i den mjuka jorden.");
-                    WriteLine("Klonk! Spaden träffar något hårt. Du drar upp en rostig rörtång!");
+                    output += "\nDu greppar tag i spaden och sätter bladet i den mjuka jorden.\n";
+                    output += "Klonk! Spaden träffar något hårt. Du drar upp en rostig rörtång!\n";
                 }
                 else
                 {
-                    // Vi "jävlas" lite genom att ge olika ledtrådar
+                    // Vi ger olika ledtrådar beroende på om spaden finns i säcken eller inte
                     bool harSpadeMenInaktiv = spelare.Ryggsack.GetAllaSaker().Any(s => s.Namn == "Spade");
 
                     if (harSpadeMenInaktiv)
                     {
-                        WriteLine("\nDet ser ut som att någon har grävt här tidigare. Markytan är lös.");
-                        WriteLine("Du provar att krafsa lite med fingrarna, men det är lönlöst.");
-                        WriteLine("Du behöver nog ta fram ett riktigt redskap om du ska komma någon vart.");
+                        output += "\nDet ser ut som att någon har grävt här tidigare. Markytan är lös.\n";
+                        output += "Du provar att krafsa lite med fingrarna, men det är lönlöst.\n";
+                        output += "Du behöver nog ta fram ett riktigt redskap om du ska komma någon vart.\n";
                     }
                     else
                     {
-                        WriteLine("\nDu rotar runt i gräset. Marken känns mjuk och uppbökad på ett ställe.");
-                        WriteLine("Det verkar finnas något här under, men du behöver nog ett verktyg för att få upp det.");
+                        output += "\nDu rotar runt i gräset. Marken känns mjuk och uppbökad på ett ställe.\n";
+                        output += "Det verkar finnas något här under, men du behöver nog ett verktyg för att få upp det.\n";
                     }
                 }
             }
             else
             {
-                WriteLine("\nDu ser inget annat än blött gräs och lera här ute.");
+                output += "\nDu ser inget annat än blött gräs och lera här ute.\n";
             }
+
+            return output;
         }
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
-            // Vi matchar mot Enum-namnen (utan ToLower för att vara konsekventa)
-            switch (s.AktivtSkodon)
+            // Vi matchar mot Enum-namnen
+            string skodon = s.AktivtSkodon;
+
+            if (skodon == Bekladnadstyp.Inne.ToString())
             {
-                case var skodon when skodon == Bekladnadstyp.Inne.ToString():
-                    WriteLine("\n[EN STRÄNG RÖST FRÅN VERANDAN]");
-                    WriteLine("'Men vad sysslar du med?! Gå inte ut här och skita ner dina tofflor!'");
-                    WriteLine("'Visa lite hyfs och byt om till något som tål lera innan du sätter din fot på gräsmattan.'");
-
-                    // Bra JAWS-fix! Vi behåller den.
-                    System.Threading.Thread.Sleep(2000);
-                    WriteLine("\n(Tryck på en tangent för att backa...)");
-                    ReadKey(true);
-
-                    return false;
-
-                case var skodon when skodon == Bekladnadstyp.Ute.ToString():
-                    WriteLine("\nDet klafsar till när bootsen möter den mjuka jorden.");
-                    WriteLine("Du ser hur sulorna omedelbart täcks av lera.");
-                    return true;
-
-                case var skodon when skodon == Bekladnadstyp.Skydd.ToString():
-                    WriteLine("\nGummistövlarna klafsar tryggt i leran. Det här är deras rätta element.");
-                    return true;
-
-                default:
-                    WriteLine("\nDu kliver ut barfota i det våta gräset. Det är kallt och klibbigt.");
-                    return true;
+                // Vi stoppar spelaren tyst här. 
+                // Motorn ser 'false' och låter spelaren stå kvar på verandan.
+                return false;
             }
+
+            // För alla andra fall (Ute, Skydd eller Barfota) släpper vi ut dem.
+            // Texten om klafsandet i leran flyttar vi lämpligtvis till UndersokRum 
+            // eller låter Spelmotor sköta framöver.
+            return true;
         }
     }
 }

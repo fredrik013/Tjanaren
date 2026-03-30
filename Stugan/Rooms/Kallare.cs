@@ -33,54 +33,58 @@ namespace Stugan.Rooms
             return true;
         }
 
-        public override void UndersokRum(Spelare spelare, Core.StoryState story)
+        public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
-            var rum = spelare.NuvarandeRum;
-
+            string output = "";
             var tofflor = SakerIRummet.Find(s => s.Namn.ToLower().Contains("tofflor"));
 
-            // 1. Hitta plagget (utan ToLower-slarv)
+            // 1. Hitta plagget (vi kollar vad som faktiskt sitter på fötterna)
             var p = spelare.Ryggsack.GetAllaSaker()
                 .OfType<Klader>()
                 .FirstOrDefault(p => p.ArAktiv && (p.Typ == Bekladnadstyp.Ute || p.Typ == Bekladnadstyp.Inne));
-            // 2. Switchen som sköter allt
+
+            // 2. Switchen som bygger upp texten baserat på fotbeklädnad
             switch (p)
             {
                 case null:
                     // Spelaren är barfota
-                    WriteLine("\nDet iskalla källarvattnet klafsar obehagligt mellan tårna. Du blir dyngsur!");
+                    output += "\nDet iskalla källarvattnet klafsar obehagligt mellan tårna. Du blir dyngsur!\n";
                     break;
 
                 case var k when !k.SkyddarMotVatten:
-                    // Har skor, men de läcker (Använder Enum istället för sträng)
+                    // Har skor, men de läcker
                     string ljudLäck = (k.Typ == Bekladnadstyp.Ute) ? "dunsar" : "ploppar";
-                    WriteLine($"\nDina skor {ljudLäck} i vätan, men fukten tränger igenom. De skyddar inte mot vatten!");
+                    output += $"\nDina skor {ljudLäck} i vätan, men fukten tränger igenom. De skyddar inte mot vatten!\n";
                     break;
 
                 case var k when k.SkyddarMotVatten:
-                    // Har skor och de är täta (Använder Enum istället för sträng)
+                    // Har skor och de är täta
                     string ljudTät = (k.Typ == Bekladnadstyp.Ute) ? "dunsar tungt" : "ploppar hemtrevligt";
-                    WriteLine($"\nDina skor {ljudTät} mot betongen och håller dina fötter torra.");
+                    output += $"\nDina skor {ljudTät} mot betongen och håller dina fötter torra.\n";
                     break;
             }
-            // 2. Själva sökandet
+
+            // 3. Själva sökandet efter tofflorna på hyllan
             if (!HarUndersokts)
             {
-                WriteLine("\nDu undersöker den torra hyllan högt upp på väggen.");
-                WriteLine("Dina fingrar nuddar något mjukt... det är ett par innetofflor!");
+                output += "\nDu undersöker den torra hyllan högt upp på väggen.\n";
+                output += "Dina fingrar nuddar något mjukt... det är ett par innetofflor!\n";
 
-                tofflor.ArGomd = false;
+                if (tofflor != null) tofflor.ArGomd = false;
                 HarUndersokts = true;
-                WriteLine("\nEtt svagt, belåtet mumlande hörs från mörkret.");
+                output += "\nEtt svagt, belåtet mumlande hörs från mörkret.\n";
             }
             else if (tofflor != null && !tofflor.ArGomd)
             {
-                WriteLine("\nDu ser innetofflorna ligga på hyllan där du hittade dem.");
+                output += "\nDu ser innetofflorna ligga på hyllan där du hittade dem.\n";
             }
             else
             {
-                WriteLine("\nDu letar noga på hyllorna men hittar inget mer än damm och spindelväv.");
+                output += "\nDu letar noga på hyllorna men hittar inget mer än damm och spindelväv.\n";
             }
+
+            // Retur till motorn så JAWS får något att bita i
+            return output;
         }
     }
 }

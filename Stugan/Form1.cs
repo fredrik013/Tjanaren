@@ -2,12 +2,12 @@ using Stugan.Core;
 
 namespace Stugan
 {
-    public partial class Form1 : Form
+    public partial class Stugan : Form
     {
         RichTextBox rtbDisplay;
         Spelmotor motor;
 
-        public Form1()
+        public Stugan()
         {
             InitializeComponent();
 
