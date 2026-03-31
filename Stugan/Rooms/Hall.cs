@@ -1,6 +1,5 @@
 ﻿using Stugan.Core;
 using Stugan.Modeller.Saker;
-using static System.Console;
 
 namespace Stugan.Rooms
 {
@@ -25,14 +24,15 @@ namespace Stugan.Rooms
             // Vi kollar om spelaren har boots OCH om huset inte redan skällt ut dem
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString() && !story.HarBlivitUtskalldHallen)
             {
-                WriteLine("\n[SYSTEMMEDDELANDE: SMUTS-DETEKTOR AKTIVERAD]");
-                WriteLine("En gäll, metallisk röst ekar från taket:");
-                WriteLine("'STOPP! Obehörig smuts detekterad på Herrskapet Von Krångels parkett!'");
-                WriteLine("'Noll-tolerans råder. Sanering krävs omedelbart, tjänare!'");
+                string text = "\n[SYSTEMMEDDELANDE: SMUTS-DETEKTOR AKTIVERAD]\n" +
+                    "En gäll, metallisk röst ekar från taket:\n" +
+                    "'STOPP! Obehörig smuts detekterad på Herrskapet Von Krångels parkett!'\n" +
+                    "'Noll-tolerans råder. Sanering krävs omedelbart, tjänare!'\n\n" +
+                    "Du känner hur nackhåren reser sig. Det här huset verkar ha ögon överallt.\n\n" +
+                    "Tryck OK för att kliva in...";
 
-                WriteLine("\nDu känner hur nackhåren reser sig. Det här huset verkar ha ögon överallt.");
-                WriteLine("Tryck på valfri tangent för att kliva in...");
-                ReadKey(true);
+                // Visa modal dialog i WinForms istället för Console.ReadKey
+                MessageBox.Show(text, "Varning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Nu sätter vi flaggan så huset håller tyst nästa gång (men smutsen är kvar)
                 story.HarBlivitUtskalldHallen = true;
@@ -40,6 +40,7 @@ namespace Stugan.Rooms
 
             return true;
         }
+
 
         public override string UndersokRum(Spelare spelare, Core.StoryState story)
         {
