@@ -12,4 +12,8 @@
     <None Remove="Core\Rumskartacopy.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NetCoreAudio" Version="2.0.1" />
+  </ItemGroup>
+
 </Project>
