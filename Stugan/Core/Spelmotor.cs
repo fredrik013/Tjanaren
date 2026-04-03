@@ -11,6 +11,10 @@ namespace Stugan.Core
 
         private StoryState _story;
 
+        private bool _isInventoryOpen = false;
+        public bool IsInventoryOpen => _isInventoryOpen; // Form1 kollar denna för att visa ListBoxen
+        public Inventory Ryggsack => _spelare.Ryggsack;
+
         public Spelmotor()
         {
             _story = new StoryState();
@@ -43,23 +47,21 @@ namespace Stugan.Core
             return intro;
         }
 
-        public string HamtaInventoryTest()
-        {
-            return "I din ryggsäck hittar du: Ett par boots.";
-        }
-
         public string HanteraInmatning(ConsoleKey tangent)
         {
             // Vi samlar all text i denna sträng för att visa i rtbDisplay
             string output = "";
+            if (_isInventoryOpen)
+            {
+                // Vi skickar med en metod (lambda) som stänger flaggan när man trycker Escape
+                return _spelare.Ryggsack.HanteraInmatning(tangent, _spelare, _story, () => _isInventoryOpen = false);
+            }
 
             switch (tangent)
             {
-                /*case ConsoleKey.I:
-                    // Ryggsäckens innehåll + rumsbeskrivning
-                    output = _spelare.Ryggsack.Visa(_spelare, _story);
-                    output += "\n" + _spelare.NuvarandeRum.VisaBeskrivning();
-                    break;*/
+                case ConsoleKey.I:
+                    _isInventoryOpen = true;
+                    return ""; // Form1 kommer se att flaggan är true och rita upp listan
 
                 case ConsoleKey.S:
                     // Status-skärmen
