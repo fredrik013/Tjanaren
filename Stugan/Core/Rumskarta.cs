@@ -44,6 +44,44 @@ namespace Stugan.Core
             omkladningsrum.Plats = new Position(1, 1, 0);
             karta.LaggTillRum(omkladningsrum.Plats, omkladningsrum);
 
+            // Inre regionen
+            Glasveranda glasveranda = new Glasveranda();
+            glasveranda.Plats = new Position(-2, 2, 0);
+            karta.LaggTillRum(glasveranda.Plats, glasveranda);
+
+            InreHall hall2 = new InreHall();
+            hall2.Plats = new Position(0, 2, 0);
+            karta.LaggTillRum(hall2.Plats, hall2);
+
+            Vardagsrum vardagsrum = new Vardagsrum();
+            vardagsrum.Plats = new Position(-1, 2, 0);
+            karta.LaggTillRum(vardagsrum.Plats, vardagsrum);
+
+            // Källare
+            Kallare kallare = new Kallare();
+            kallare.Plats = new Position(0, 1, -1);
+            karta.LaggTillRum(kallare.Plats, kallare);
+
+            Matkallare matkallare = new Matkallare();
+            matkallare.Plats = new Position(0, 2, -1);
+            karta.LaggTillRum(matkallare.Plats, matkallare);
+
+
+            Pannrum pannrum = new Pannrum();
+            pannrum.Plats = new Position(1, 1, -1);
+            karta.LaggTillRum(pannrum.Plats, pannrum);
+
+            Tjanarrum tjanarrum = new Tjanarrum();
+            tjanarrum.Plats = new Position(0, 0, -1);
+            karta.LaggTillRum(tjanarrum.Plats, tjanarrum);
+
+
+            Tvattstuga tvattstuga = new Tvattstuga();
+            tvattstuga.Plats = new Position(-1, 1, -1);
+            karta.LaggTillRum(tvattstuga.Plats, tvattstuga);
+
+
+
             return gardsplan;
         }
     }
