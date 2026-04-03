@@ -44,11 +44,19 @@ namespace Stugan.Rooms
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
+            // Här kollar vi om spelaren har uteskor (boots)
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
-                // Istället för WriteLine, låter vi Spelmotorn sköta snacket.
-                // Vi kan senare lägga till en egenskap i Rum som heter "HinderText" 
-                // om vi vill att JAWS ska förklara varför det tog stopp.
+                string text = "\n[SYSTEMMEDDELANDE: HYGIENKONTROLL]\n" +
+                              "En röst från en dold högtalare vid köksdörren piper:\n" +
+                              "'STOPP! Smutsiga uteskor detekterade i en zon för livsmedelshantering.'\n" +
+                              "'Vänligen byt till inneskor i hallen innan du beträder Herrskapets kök.'\n\n" +
+                              "Du kan inte gå in här med de där skorna.";
+
+                // Visa meddelandet - JAWS fokuserar här direkt
+                MessageBox.Show(text, "Hygienkontroll - Tillträde förbjudet", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+                // Vi returnerar false eftersom man INTE får kliva in med uteskor
                 return false;
             }
 
