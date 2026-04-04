@@ -8,6 +8,7 @@ namespace Stugan
         RichTextBox rtbDisplay;
         ListBox lstInventory;
         NavButton btnNav;
+        Spelare spelare;
         Spelmotor motor;
 
         public Form1()
@@ -125,10 +126,10 @@ namespace Stugan
             foreach (var sak in motor.Ryggsack.GetAllaSaker())
             {
                 string status = "";
-                if (sak is Klader k) status = k.ArAktiv ? " (påtagen)" : " (i väskan)";
-                else if (sak is Redskap r) status = r.ArAktiv ? " (i handen)" : " (i väskan)";
-                else if (sak is AllmanSak a) status = a.ArAktiv ? " (i handen)" : " (i väskan)";
-                else if (sak is Livsmedel l) status = l.ArAktiv ? " (i handen)" : " (i väskan)";
+                if (sak is Klader k) status = k.ArAktiv ? " (påtagen)" : " (i ryggsäcken)";
+                else if (sak is Redskap r) status = r.ArAktiv ? " (i handen)" : " (i ryggsäcken)";
+                else if (sak is AllmanSak a) status = a.ArAktiv ? " (i handen)" : " (i ryggsäcken)";
+                else if (sak is Livsmedel l) status = l.ArAktiv ? " (i handen)" : " (i ryggsäcken)";
                 lstInventory.Items.Add($"{sak.Namn}{status}");
             }
 
