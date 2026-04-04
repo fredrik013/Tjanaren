@@ -59,8 +59,10 @@ namespace Stugan.Rooms
                 // Vi returnerar false eftersom man INTE får kliva in med uteskor
                 return false;
             }
-
-            return true;
+            else
+            {
+                return true;
+            }
         }
     }
 }

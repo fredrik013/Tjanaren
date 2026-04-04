@@ -7,7 +7,7 @@ namespace Stugan
     {
         RichTextBox rtbDisplay;
         ListBox lstInventory;
-        NavButton btnNav; // Ändrad till vår nya klass
+        NavButton btnNav;
         Spelmotor motor;
 
         public Form1()
@@ -15,7 +15,6 @@ namespace Stugan
             InitializeComponent();
             motor = new Spelmotor();
 
-            // 1. Skapa vår special-knapp som tillåter pilar
             btnNav = new NavButton
             {
                 Text = "Navigation (Här kan du gå med pilarna)",
@@ -24,7 +23,6 @@ namespace Stugan
                 TabIndex = 1
             };
 
-            // 2. Skapa Inventory-listan
             lstInventory = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -33,7 +31,6 @@ namespace Stugan
                 TabIndex = 2
             };
 
-            // 3. Skapa Displayen
             rtbDisplay = new RichTextBox
             {
                 Dock = DockStyle.Fill,
@@ -59,7 +56,7 @@ namespace Stugan
         {
             ConsoleKey tryckt = (ConsoleKey)e.KeyCode;
 
-            // --- NAVIGATION (Nu lyssnar den faktiskt!) ---
+            // --- NAVIGATION ---
             if (btnNav.Focused)
             {
                 if (tryckt == ConsoleKey.UpArrow || tryckt == ConsoleKey.DownArrow ||
@@ -73,29 +70,47 @@ namespace Stugan
                 }
             }
 
-            // --- RYGGSÄCK ---
+            // --- RYGGSÄCK (ÖPPEN) ---
             if (motor.IsInventoryOpen && lstInventory.Visible)
             {
-                motor.Ryggsack.MarkeratIndex = lstInventory.SelectedIndex;
-                string resultat = motor.HanteraInmatning(tryckt);
+                if (tryckt == ConsoleKey.Escape || tryckt == ConsoleKey.I)
+                {
+                    // Stäng logiskt i motorn
+                    motor.HanteraInmatning(ConsoleKey.Escape);
 
-                if (!string.IsNullOrEmpty(resultat))
+                    // FIX: Vi använder HamtaStartText() som vi VET finns och 
+                    // som returnerar rumsnamnet/beskrivningen.
+                    string rumsNamn = motor.HamtaStartText();
+                    VisaRum(rumsNamn);
+                    return;
+                }
+
+                motor.Ryggsack.MarkeratIndex = lstInventory.SelectedIndex;
+                string resultatInv = motor.HanteraInmatning(tryckt);
+
+                if (!string.IsNullOrEmpty(resultatInv))
                 {
                     rtbDisplay.Clear();
-                    rtbDisplay.AppendText(resultat);
-                    lstInventory.AccessibleName = resultat;
+                    rtbDisplay.AppendText(resultatInv);
+                    lstInventory.AccessibleName = resultatInv;
                 }
                 VisaRyggsack();
-                lstInventory.AccessibleName = null;
                 return;
             }
 
-            // --- I, S, U ---
+            // --- KOMMANDON (I, S, U) ---
             if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U)
             {
-                string resultat = motor.HanteraInmatning(tryckt);
-                if (motor.IsInventoryOpen) VisaRyggsack();
-                else VisaRum(resultat);
+                string resultatKommando = motor.HanteraInmatning(tryckt);
+                if (motor.IsInventoryOpen)
+                {
+                    rtbDisplay.Clear();
+                    VisaRyggsack();
+                }
+                else
+                {
+                    VisaRum(resultatKommando);
+                }
             }
         }
 
@@ -129,17 +144,17 @@ namespace Stugan
             btnNav.Visible = true;
             rtbDisplay.Visible = true;
 
+            rtbDisplay.Clear();
+
             if (!string.IsNullOrEmpty(resultat))
             {
-                rtbDisplay.Clear();
                 rtbDisplay.AppendText(resultat);
             }
+
+            rtbDisplay.Focus();
         }
     }
 
-    // DENNA KLASS LÖSER PROBLEMET:
-    // En vanlig knapp sväljer piltangenter. Denna version säger till Windows att
-    // vi vill använda pilarna själva.
     public class NavButton : Button
     {
         protected override bool IsInputKey(Keys keyData)
@@ -150,7 +165,7 @@ namespace Stugan
                 case Keys.Down:
                 case Keys.Left:
                 case Keys.Right:
-                    return true; // Ja, jag vill ha dessa tangenter!
+                    return true;
                 default:
                     return base.IsInputKey(keyData);
             }
