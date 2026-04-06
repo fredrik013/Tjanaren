@@ -5,7 +5,7 @@ namespace Stugan.Core
 {
     public class Spelmotor
     {
-        private Spelare _spelare;
+        public Spelare _spelare;
 
         private WorldMap _worldMap;
 

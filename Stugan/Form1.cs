@@ -81,8 +81,9 @@ namespace Stugan
 
                     // FIX: Vi använder HamtaStartText() som vi VET finns och 
                     // som returnerar rumsnamnet/beskrivningen.
-                    string rumsNamn = motor.HamtaStartText();
-                    VisaRum(rumsNamn);
+                    var rum = motor._spelare.NuvarandeRum;
+                    string rumsInfo = $"{rum.Namn}\n{rum.Beskrivning}";
+                    VisaRum(rumsInfo);
                     return;
                 }
 
