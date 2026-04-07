@@ -1,6 +1,5 @@
 ﻿using Forvaltaren.Core;
 using Forvaltaren.Modeller.Saker;
-using static System.Console;
 
 namespace Forvaltaren.Rooms
 {
@@ -33,16 +32,16 @@ namespace Forvaltaren.Rooms
             if (!dorrLast) return true;
             if (aktivNyckel != null)
             {
-                WriteLine("\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!");
-                WriteLine("Tryck på valfri tangent för att gå in...");
-                ReadKey(true);
+                string text = "\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!";
+                MessageBox.Show(text, "Dörren låses upp", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dorrLast = false;
                 return true;
             }
 
             else
             {
-                WriteLine("Dörren är låst. Du måste ha en nyckel för att komma in.");
+                string text = "Dörren är låst. Du måste ha en nyckel för att komma in.";
+                MessageBox.Show(text, "Dörren är låst", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
         }
