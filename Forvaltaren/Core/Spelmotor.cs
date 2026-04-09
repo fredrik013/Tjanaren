@@ -32,7 +32,7 @@ namespace Forvaltaren.Core
         {
             // Vi använder en StringBuilder eller bara vanlig sträng-konkatenering
             string intro = "--- TJÄNARE HOS HERRSKAPET VON KRÅNGEL ---\n\n";
-            intro += "Välkommen till Stugan.\n";
+            intro += "Välkommen till Tjänaren!\n";
             intro += "Regnet piskar mot nacken när du står utanför den gamla träbyggnaden.\n";
             intro += "Du har blivit anställd för att städa upp efter familjen Von Krångel,\n";
             intro += "men de dömande blickarna från fönstren antyder att de förväntar sig underverk.\n\n";
@@ -80,11 +80,20 @@ namespace Forvaltaren.Core
                     output = _spelare.NuvarandeRum.VisaObjektLista(_spelare, _story);
                     break;*/
 
-                /*case ConsoleKey.T:
-                    // Här anropas din metod för att plocka upp saker
-                    // (Se till att TaUppSak returnerar en sträng nu!)
-                    output = TaUppSak();
-                    break;*/
+                case ConsoleKey.T:
+                    // 1. Hämta listan med TaUppSak
+                    var lista = TaUppSak();
+
+                    // 2. Skicka första saken i listan till VerkstallUpplockning för att få strängen
+                    if (lista.Count > 0)
+                    {
+                        output = VerkstallUpplockning(lista[0]);
+                    }
+                    else
+                    {
+                        output = "\nDet finns inget här att plocka upp.";
+                    }
+                    break;
 
                 case ConsoleKey.B:
                     // Lång beskrivning av rummet

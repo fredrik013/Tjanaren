@@ -101,7 +101,7 @@ namespace Stugan
             }
 
             // --- KOMMANDON (I, S, U) ---
-            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U)
+            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B)
             {
                 string resultatKommando = motor.HanteraInmatning(tryckt);
                 if (motor.IsInventoryOpen)
@@ -135,7 +135,13 @@ namespace Stugan
             }
 
             if (lstInventory.Items.Count > 0)
+            {
+
+                if (nuvarandeIndex >= lstInventory.Items.Count)
+                    nuvarandeIndex = lstInventory.Items.Count - 1;
+
                 lstInventory.SelectedIndex = nuvarandeIndex != -1 ? nuvarandeIndex : 0;
+            }
 
             lstInventory.Focus();
         }
