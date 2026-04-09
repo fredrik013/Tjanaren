@@ -37,7 +37,7 @@
             ClientSize = new Size(560, 270);
             Margin = new Padding(2);
             Name = "Form1";
-            Text = "Förvaltaren";
+            Text = "Tjänaren";
             ResumeLayout(false);
         }
 
