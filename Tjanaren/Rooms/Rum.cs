@@ -137,7 +137,7 @@ namespace Tjanaren.Rooms
 
         // 2. Hitta saker som ligger framme och går att ta
         // Vi filtrerar bort de som är gömda (ArGomd == true)
-        private string VisaSakerIRummet()
+        public string VisaSakerIRummet()
         {
             var synligaSaker = SakerIRummet.Where(s => s.KanPlockasUpp && !s.ArGomd).ToList();
             string text = "";

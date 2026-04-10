@@ -81,17 +81,24 @@ namespace Tjanaren.Core
                     break;*/
 
                 case ConsoleKey.T:
-                    // 1. Hämta listan med TaUppSak
+                    // 1. Hämta listan med prylar som kan plockas upp
                     var lista = TaUppSak();
 
-                    // 2. Skicka första saken i listan till VerkstallUpplockning för att få strängen
-                    if (lista.Count > 0)
+                    // 2. Om det bara finns en sak, plocka upp den direkt
+                    if (lista.Count == 1)
                     {
                         output = VerkstallUpplockning(lista[0]);
                     }
-                    else
+                    // 3. Om det inte finns något alls
+                    else if (lista.Count == 0)
                     {
                         output = "\nDet finns inget här att plocka upp.";
+                    }
+                    // 4. Om det finns FLERA saker
+                    else
+                    {
+                        // Vi anropar din befintliga metod som bygger strängen med alla synliga saker
+                        output = _spelare.NuvarandeRum.VisaSakerIRummet();
                     }
                     break;
 
