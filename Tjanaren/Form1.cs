@@ -7,6 +7,7 @@ namespace Tjanaren
     {
         RichTextBox rtbDisplay;
         ListBox lstInventory;
+        ListBox lstRoomItems;
         NavButton btnNav;
         Spelare spelare;
         Spelmotor motor;
@@ -32,6 +33,14 @@ namespace Tjanaren
                 TabIndex = 2
             };
 
+            lstRoomItems = new ListBox
+            {
+                Dock = DockStyle.Fill,
+                Visible = false,
+                Font = new Font("Consolas", 12),
+                TabIndex = 4 // Nytt TabIndex
+            };
+
             rtbDisplay = new RichTextBox
             {
                 Dock = DockStyle.Fill,
@@ -41,6 +50,7 @@ namespace Tjanaren
             };
 
             this.Controls.Add(lstInventory);
+            this.Controls.Add(lstRoomItems);
             this.Controls.Add(rtbDisplay);
             this.Controls.Add(btnNav);
 
@@ -156,6 +166,43 @@ namespace Tjanaren
             }
 
             lstInventory.Focus();
+        }
+
+        private void VisaRoomItems()
+        {
+            btnNav.Visible = false;
+            rtbDisplay.Visible = false;
+            lstInventory.Visible = false;
+            lstRoomItems.Visible = true;
+
+            int nuvarandeIndex = lstRoomItems.SelectedIndex;
+            lstRoomItems.Items.Clear();
+
+            // Vi hämtar objekten direkt från rummet
+            var sakerIRummet = motor._spelare.NuvarandeRum.SakerIRummet;
+
+            if (sakerIRummet.Count == 0)
+            {
+                VisaRum("Det finns inga lösa föremål här.");
+                return;
+            }
+
+            foreach (var sak in sakerIRummet)
+            {
+                // Här hämtar vi bara namnet eftersom de befinner sig i rummet
+                // och inte har någon aktiv status (påtagen/i hand) än.
+                lstRoomItems.Items.Add(sak.Namn);
+            }
+
+            if (lstRoomItems.Items.Count > 0)
+            {
+                if (nuvarandeIndex >= lstRoomItems.Items.Count)
+                    nuvarandeIndex = lstRoomItems.Items.Count - 1;
+
+                lstRoomItems.SelectedIndex = nuvarandeIndex != -1 ? nuvarandeIndex : 0;
+            }
+
+            lstRoomItems.Focus();
         }
 
         private void VisaRum(string resultat)

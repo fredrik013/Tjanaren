@@ -15,6 +15,9 @@ namespace Tjanaren.Core
         public bool IsInventoryOpen => _isInventoryOpen; // Form1 kollar denna för att visa ListBoxen
         public Inventory Ryggsack => _spelare.Ryggsack;
 
+        private bool _isRoomMenuOpen = false;
+        public bool isRoomMenuOpen => _isRoomMenuOpen;
+
         public Spelmotor()
         {
             _story = new StoryState();
