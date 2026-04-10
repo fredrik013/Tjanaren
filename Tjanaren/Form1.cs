@@ -55,6 +55,18 @@ namespace Tjanaren
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+
+            if (e.KeyCode == Keys.F6 || e.KeyCode == Keys.Tab)
+            {
+                bool framat = !e.Shift; // Shift + tangent betyder gå baklänges
+
+                // Vi letar upp nästa kontroll i TabIndex-ordningen
+                this.SelectNextControl(this.ActiveControl, framat, true, true, true);
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
             ConsoleKey tryckt = (ConsoleKey)e.KeyCode;
 
             // --- NAVIGATION ---
