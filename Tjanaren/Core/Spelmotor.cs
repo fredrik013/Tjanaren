@@ -12,28 +12,32 @@ namespace Tjanaren.Core
         private StoryState _story;
 
         private bool _isInventoryOpen = false;
-        public bool IsInventoryOpen => _isInventoryOpen; // Form1 kollar denna för att visa ListBoxen
+        public bool IsInventoryOpen => _isInventoryOpen;
         public Inventory Ryggsack => _spelare.Ryggsack;
 
         private bool _isRoomMenuOpen = false;
         public bool isRoomMenuOpen => _isRoomMenuOpen;
+
+        // Nytt: Hantering av föremålsval
+        private bool _isSelectingItem = false;
+        public bool IsSelectingItem => _isSelectingItem;
+
+        private List<Spelsak> _itemsToSelect = new List<Spelsak>();
+        public List<Spelsak> ItemsToSelect => _itemsToSelect;
+
+        public int SelectedItemIndex { get; set; } = 0;
 
         public Spelmotor()
         {
             _story = new StoryState();
             _worldMap = new WorldMap();
 
-            // HÄR ÄR FIXEN: 
-            // Vi säger åt motorn att använda metoden som finns i klassen Rumskarta
             Rum startRum = Rumskarta.SkapaVarlden(_worldMap, _story);
-
-            // Nu har vi startRum och kan initiera spelaren
             _spelare = new Spelare(startRum);
         }
 
         public string HamtaStartText()
         {
-            // Vi använder en StringBuilder eller bara vanlig sträng-konkatenering
             string intro = "--- TJÄNARE HOS HERRSKAPET VON KRÅNGEL ---\n\n";
             intro += "Välkommen till Tjänaren!\n";
             intro += "Regnet piskar mot nacken när du står utanför den gamla träbyggnaden.\n";
@@ -44,7 +48,6 @@ namespace Tjanaren.Core
             intro += "och dina boots är ordentligt snörade på fötterna – bäst att inte smutsa ner finmattorna...\n";
             intro += "\n--------------------------------------------------\n\n";
 
-            // Slutligen lägger vi till rumsbeskrivningen för startrummet (Gårdsplanen)
             intro += _spelare.NuvarandeRum.VisaBeskrivning();
 
             return intro;
@@ -52,11 +55,16 @@ namespace Tjanaren.Core
 
         public string HanteraInmatning(ConsoleKey tangent)
         {
-            // Vi samlar all text i denna sträng för att visa i rtbDisplay
             string output = "";
+
+            // Om vi är i föremålsvalsläge, hantera det först
+            if (_isSelectingItem)
+            {
+                return HanteraForemalsvalet(tangent);
+            }
+
             if (_isInventoryOpen)
             {
-                // Vi skickar med en metod (lambda) som stänger flaggan när man trycker Escape
                 return _spelare.Ryggsack.HanteraInmatning(tangent, _spelare, _story, () => _isInventoryOpen = false);
             }
 
@@ -64,13 +72,11 @@ namespace Tjanaren.Core
             {
                 case ConsoleKey.I:
                     _isInventoryOpen = true;
-                    return ""; // Form1 kommer se att flaggan är true och rita upp listan
+                    return "";
 
                 case ConsoleKey.S:
-                    // Status-skärmen
                     output = _spelare.VisaStatus(_story);
                     output += "\n\nTryck på valfri tangent för att återgå till rummet...";
-                    // I Form1 rensas texten vid nästa knapptryck, så detta fungerar som din gamla ReadKey
                     break;
 
                 case ConsoleKey.U:
@@ -78,40 +84,32 @@ namespace Tjanaren.Core
                     output += _spelare.NuvarandeRum.UndersokRum(_spelare, _story);
                     break;
 
-                /*case ConsoleKey.O:
-                    // "O" för Objekt - hämtar listan från Rum.cs
-                    output = _spelare.NuvarandeRum.VisaObjektLista(_spelare, _story);
-                    break;*/
-
                 case ConsoleKey.T:
-                    // 1. Hämta listan med prylar som kan plockas upp
                     var lista = TaUppSak();
 
-                    // 2. Om det bara finns en sak, plocka upp den direkt
                     if (lista.Count == 1)
                     {
                         output = VerkstallUpplockning(lista[0]);
                     }
-                    // 3. Om det inte finns något alls
                     else if (lista.Count == 0)
                     {
                         output = "\nDet finns inget här att plocka upp.";
                     }
-                    // 4. Om det finns FLERA saker
                     else
                     {
-                        // Vi anropar din befintliga metod som bygger strängen med alla synliga saker
-                        output = _spelare.NuvarandeRum.VisaSakerIRummet();
+                        // Öppna valsidan för flera föremål
+                        _isSelectingItem = true;
+                        _itemsToSelect = lista;
+                        SelectedItemIndex = 0;
+                        output = "";
                     }
                     break;
 
                 case ConsoleKey.B:
-                    // Lång beskrivning av rummet
                     output = _spelare.NuvarandeRum.LasLangBeskrivning();
                     break;
 
                 case ConsoleKey.M:
-                    // Underhåll (t.ex. starta tvättmaskinen eller laga rör)
                     output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
                     break;
 
@@ -147,10 +145,44 @@ namespace Tjanaren.Core
             return output;
         }
 
-        // Vi ändrar den till att returnera en string för att fönstret ska kunna visa den
+        private string HanteraForemalsvalet(ConsoleKey tangent)
+        {
+            switch (tangent)
+            {
+                case ConsoleKey.UpArrow:
+                    if (SelectedItemIndex > 0)
+                        SelectedItemIndex--;
+                    return "";
+
+                case ConsoleKey.DownArrow:
+                    if (SelectedItemIndex < _itemsToSelect.Count - 1)
+                        SelectedItemIndex++;
+                    return "";
+
+                case ConsoleKey.Enter:
+                    var valdSak = _itemsToSelect[SelectedItemIndex];
+                    string resultat = VerkstallUpplockning(valdSak);
+
+                    _isSelectingItem = false;
+                    _itemsToSelect.Clear();
+                    SelectedItemIndex = 0;
+
+                    return resultat;
+
+                case ConsoleKey.Escape:
+                    _isSelectingItem = false;
+                    _itemsToSelect.Clear();
+                    SelectedItemIndex = 0;
+
+                    return _spelare.NuvarandeRum.VisaBeskrivning();
+
+                default:
+                    return "";
+            }
+        }
+
         private string FlyttaSpelare(string riktning)
         {
-            // Vi skapar en lokal variabel för att samla upp texten istället för WriteLine
             string logg = "";
             string exitText;
 

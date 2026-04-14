@@ -68,9 +68,8 @@ namespace Tjanaren
 
             if (e.KeyCode == Keys.F6 || e.KeyCode == Keys.Tab)
             {
-                bool framat = !e.Shift; // Shift + tangent betyder gå baklänges
+                bool framat = !e.Shift;
 
-                // Vi letar upp nästa kontroll i TabIndex-ordningen
                 this.SelectNextControl(this.ActiveControl, framat, true, true, true);
 
                 e.Handled = true;
@@ -78,6 +77,41 @@ namespace Tjanaren
                 return;
             }
             ConsoleKey tryckt = (ConsoleKey)e.KeyCode;
+
+            // --- FÖREMÅLSVAL (NYTT) ---
+            if (motor.IsSelectingItem && lstInventory.Visible)
+            {
+                if (tryckt == ConsoleKey.UpArrow || tryckt == ConsoleKey.DownArrow)
+                {
+                    motor.HanteraInmatning(tryckt);
+                    VisaForemalsvalet();
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    return;
+                }
+
+                if (tryckt == ConsoleKey.Enter)
+                {
+                    string resultat = motor.HanteraInmatning(tryckt);
+
+                    if (!motor.IsSelectingItem)
+                    {
+                        VisaRum(resultat);
+                    }
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    return;
+                }
+
+                if (tryckt == ConsoleKey.Escape)
+                {
+                    string resultat = motor.HanteraInmatning(tryckt);
+                    VisaRum(resultat);
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    return;
+                }
+            }
 
             // --- NAVIGATION ---
             if (btnNav.Focused)
@@ -98,11 +132,8 @@ namespace Tjanaren
             {
                 if (tryckt == ConsoleKey.Escape || tryckt == ConsoleKey.I)
                 {
-                    // Stäng logiskt i motorn
                     motor.HanteraInmatning(ConsoleKey.Escape);
 
-                    // FIX: Vi använder HamtaStartText() som vi VET finns och 
-                    // som returnerar rumsnamnet/beskrivningen.
                     var rum = motor._spelare.NuvarandeRum;
                     string rumsInfo = $"{rum.Namn}\n{rum.Beskrivning}";
                     VisaRum(rumsInfo);
@@ -122,11 +153,16 @@ namespace Tjanaren
                 return;
             }
 
-            // --- KOMMANDON (I, S, U) ---
+            // --- KOMMANDON (I, S, U, T, B) ---
             if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B)
             {
                 string resultatKommando = motor.HanteraInmatning(tryckt);
-                if (motor.IsInventoryOpen)
+
+                if (motor.IsSelectingItem)
+                {
+                    VisaForemalsvalet();
+                }
+                else if (motor.IsInventoryOpen)
                 {
                     rtbDisplay.Clear();
                     VisaRyggsack();
@@ -136,6 +172,22 @@ namespace Tjanaren
                     VisaRum(resultatKommando);
                 }
             }
+        }
+
+        private void VisaForemalsvalet()
+        {
+            btnNav.Visible = false;
+            rtbDisplay.Visible = false;
+            lstInventory.Visible = true;
+
+            lstInventory.Items.Clear();
+            foreach (var sak in motor.ItemsToSelect)
+            {
+                lstInventory.Items.Add(sak.Namn);
+            }
+
+            lstInventory.SelectedIndex = motor.SelectedItemIndex;
+            lstInventory.Focus();
         }
 
         private void VisaRyggsack()
@@ -166,43 +218,6 @@ namespace Tjanaren
             }
 
             lstInventory.Focus();
-        }
-
-        private void VisaRoomItems()
-        {
-            btnNav.Visible = false;
-            rtbDisplay.Visible = false;
-            lstInventory.Visible = false;
-            lstRoomItems.Visible = true;
-
-            int nuvarandeIndex = lstRoomItems.SelectedIndex;
-            lstRoomItems.Items.Clear();
-
-            // Vi hämtar objekten direkt från rummet
-            var sakerIRummet = motor._spelare.NuvarandeRum.SakerIRummet;
-
-            if (sakerIRummet.Count == 0)
-            {
-                VisaRum("Det finns inga lösa föremål här.");
-                return;
-            }
-
-            foreach (var sak in sakerIRummet)
-            {
-                // Här hämtar vi bara namnet eftersom de befinner sig i rummet
-                // och inte har någon aktiv status (påtagen/i hand) än.
-                lstRoomItems.Items.Add(sak.Namn);
-            }
-
-            if (lstRoomItems.Items.Count > 0)
-            {
-                if (nuvarandeIndex >= lstRoomItems.Items.Count)
-                    nuvarandeIndex = lstRoomItems.Items.Count - 1;
-
-                lstRoomItems.SelectedIndex = nuvarandeIndex != -1 ? nuvarandeIndex : 0;
-            }
-
-            lstRoomItems.Focus();
         }
 
         private void VisaRum(string resultat)
