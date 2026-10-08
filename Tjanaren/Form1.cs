@@ -60,7 +60,7 @@ namespace Tjanaren
             string startHalsning = motor.HamtaStartText();
             VisaRum(startHalsning);
 
-            rtbDisplay.Focus();
+            // rtbDisplay.Focus();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -154,7 +154,7 @@ namespace Tjanaren
             }
 
             // --- KOMMANDON (I, S, U, T, B) ---
-            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B)
+            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M)
             {
                 string resultatKommando = motor.HanteraInmatning(tryckt);
 
