@@ -60,7 +60,7 @@ namespace Tjanaren
             string startHalsning = motor.HamtaStartText();
             VisaRum(startHalsning);
 
-            // rtbDisplay.Focus();
+            rtbDisplay.Focus();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -233,7 +233,7 @@ namespace Tjanaren
                 rtbDisplay.AppendText(resultat);
             }
 
-            rtbDisplay.Focus();
+            // rtbDisplay.Focus();
         }
     }
 
