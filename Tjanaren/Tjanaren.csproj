@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="readMe.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NetCoreAudio" Version="2.0.1" />
   </ItemGroup>
 
