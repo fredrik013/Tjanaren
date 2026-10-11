@@ -1,4 +1,4 @@
-﻿# Tjänaren – ett humoristiskt textäventyr på svenska
+# Tjänaren – ett humoristiskt textäventyr på svenska
 
 ## Bakgrunden till Tjänaren
 
