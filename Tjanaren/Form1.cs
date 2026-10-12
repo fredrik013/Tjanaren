@@ -137,6 +137,7 @@ namespace Tjanaren
                     var rum = motor._spelare.NuvarandeRum;
                     string rumsInfo = $"{rum.Namn}\n{rum.Beskrivning}";
                     VisaRum(rumsInfo);
+                    btnNav.Focus();
                     return;
                 }
 
