@@ -16,7 +16,7 @@ namespace Tjanaren.Core
         public Inventory Ryggsack => _spelare.Ryggsack;
 
         private bool _isRoomMenuOpen = false;
-        public bool isRoomMenuOpen => _isRoomMenuOpen;
+        public bool IsRoomMenuOpen => _isRoomMenuOpen;
 
         // Nytt: Hantering av föremålsval
         private bool _isSelectingItem = false;
@@ -68,6 +68,23 @@ namespace Tjanaren.Core
                 return _spelare.Ryggsack.HanteraInmatning(tangent, _spelare, _story, () => _isInventoryOpen = false);
             }
 
+            if (_isRoomMenuOpen)
+            {
+                if (tangent == ConsoleKey.Escape)
+                {
+                    _isRoomMenuOpen = false;
+                    return "Du avslutar underhållet.";
+                }
+
+                if (tangent >= ConsoleKey.D1 && tangent <= ConsoleKey.D9)
+                {
+                    return _spelare.NuvarandeRum.HanteraUnderhallsval(
+                        tangent, _spelare, _story);
+                }
+
+                return "";
+            }
+
             switch (tangent)
             {
                 case ConsoleKey.I:
@@ -111,6 +128,7 @@ namespace Tjanaren.Core
 
                 case ConsoleKey.M:
                     output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
+                    _isRoomMenuOpen = _spelare.NuvarandeRum.HarUnderhallsmeny;
                     break;
 
                 case ConsoleKey.UpArrow:

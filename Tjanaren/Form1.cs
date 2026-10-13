@@ -8,6 +8,7 @@ namespace Tjanaren
         RichTextBox rtbDisplay;
         ListBox lstInventory;
         ListBox lstRoomItems;
+        ListBox lstMaintenance;
         NavButton btnNav;
         Spelare spelare;
         Spelmotor motor;
@@ -32,7 +33,14 @@ namespace Tjanaren
                 Font = new Font("Consolas", 12),
                 TabIndex = 2
             };
-
+            lstMaintenance = new ListBox
+            {
+                Dock = DockStyle.Fill,
+                Visible = false,
+                Font = new Font("Consolas", 12),
+                TabIndex = 5,
+                AccessibleName = "Underhåll"
+            };
             lstRoomItems = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -53,7 +61,7 @@ namespace Tjanaren
             this.Controls.Add(lstRoomItems);
             this.Controls.Add(rtbDisplay);
             this.Controls.Add(btnNav);
-
+            this.Controls.Add(lstMaintenance);
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
 
@@ -154,6 +162,34 @@ namespace Tjanaren
                 return;
             }
 
+            if (motor.IsRoomMenuOpen &&
+                !(rtbDisplay.Focused &&
+                  (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+                   e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)))
+            {
+                ConsoleKey menyTangent = tryckt;
+
+                if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
+                {
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 + (int)(e.KeyCode - Keys.D1));
+                }
+                else if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
+                {
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 + (int)(e.KeyCode - Keys.NumPad1));
+                }
+
+                string resultat = motor.HanteraInmatning(menyTangent);
+
+                if (!string.IsNullOrEmpty(resultat))
+                {
+                    rtbDisplay.Text = resultat;
+                }
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
             // --- KOMMANDON (I, S, U, T, B) ---
             if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M)
             {
@@ -223,6 +259,31 @@ namespace Tjanaren
             }
 
             lstInventory.Focus();
+        }
+
+        private void VisaUnderhall(IEnumerable<string> alternativ)
+        {
+            btnNav.Visible = false;
+            lstInventory.Visible = false;
+
+            lstMaintenance.Dock = DockStyle.Fill;
+            rtbDisplay.Dock = DockStyle.Bottom;
+            rtbDisplay.Height = 100;
+
+            rtbDisplay.Visible = true;
+            lstMaintenance.Visible = true;
+
+            lstMaintenance.Items.Clear();
+
+            foreach (string alternativText in alternativ)
+            {
+                lstMaintenance.Items.Add(alternativText);
+            }
+
+            if (lstMaintenance.Items.Count > 0)
+                lstMaintenance.SelectedIndex = 0;
+
+            lstMaintenance.Focus();
         }
 
         private void VisaRum(string resultat)

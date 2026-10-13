@@ -15,6 +15,8 @@ namespace Tjanaren.Rooms
 
         public bool HarUndersokts { get; set; } = false;
 
+        public virtual bool HarUnderhallsmeny => false;
+
         public List<Spelsak> SakerIRummet { get; set; } = new List<Spelsak>();
 
         public Position? Plats { get; set; }
@@ -195,6 +197,12 @@ namespace Tjanaren.Rooms
         {
             // Vi returnerar standardtexten istället för att skriva ut den
             return "\nDet finns inget här som behöver underhållas just nu.";
+        }
+
+        public virtual string HanteraUnderhallsval(
+    ConsoleKey val, Spelare spelare, StoryState story)
+        {
+            return "";
         }
 
         // Denna metod är fast och körs likadant för alla rum, 
