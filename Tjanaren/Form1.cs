@@ -128,7 +128,7 @@ namespace Tjanaren
             }
 
             // --- RYGGSÄCK (ÖPPEN) ---
-            if (motor.IsInventoryOpen && lstInventory.Visible)
+            if (motor.IsInventoryOpen && lstInventory.Visible && lstInventory.Focused)
             {
                 if (tryckt == ConsoleKey.Escape || tryckt == ConsoleKey.I)
                 {
@@ -195,7 +195,10 @@ namespace Tjanaren
         private void VisaRyggsack()
         {
             btnNav.Visible = false;
-            rtbDisplay.Visible = false;
+            lstInventory.Dock = DockStyle.Fill;
+            rtbDisplay.Dock = DockStyle.Bottom;
+            rtbDisplay.Height = 100;
+            rtbDisplay.Visible = true;
             lstInventory.Visible = true;
 
             int nuvarandeIndex = lstInventory.SelectedIndex;
@@ -227,7 +230,8 @@ namespace Tjanaren
             lstInventory.Visible = false;
             btnNav.Visible = true;
             rtbDisplay.Visible = true;
-
+            lstInventory.Dock = DockStyle.Fill;
+            rtbDisplay.Dock = DockStyle.Fill;
             rtbDisplay.Clear();
 
             if (!string.IsNullOrEmpty(resultat))
