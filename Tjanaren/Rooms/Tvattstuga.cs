@@ -15,31 +15,56 @@ namespace Tjanaren.Rooms
 
         }
 
+        public override bool HarUnderhallsmeny => true;
+
         public override string UtforUnderhall(Spelare spelare, StoryState story)
         {
-            string output = "";
+            string meny = "--- UNDERHÅLL I TVÄTTSTUGAN ---\n";
+            meny += "1. Starta tvättmaskinen\n";
 
-            // Vi kollar bootsen först eftersom de ofta är smutsiga efter trädgården
-            if (spelare.Ryggsack.HarForemal("Boots"))
-            {
-                output += "\nDu tar fram borsten och putsar bort leran från dina boots.\n";
-                output += "De glänser nu som nya.\n";
-            }
+                meny += "2. Putsa dina smutsiga boots\n";
+            
+                        meny += "Escape. Avbryt\n";
+            return meny;
+        }
 
-            // Sedan kollar vi maskinen
-            if (!story.TvattmaskinArIgang)
+        public override string HanteraUnderhallsval(
+    ConsoleKey val,
+    Spelare spelare,
+    StoryState story)
+        {
+            if (val == ConsoleKey.D1)
             {
+                if (story.TvattmaskinArIgang)
+                {
+                    return "Tvättmaskinen är redan igång.";
+                }
+
                 story.TvattmaskinArIgang = true;
-                output += "\n[KLICK-SURRRRR]\n";
-                output += "Du trycker på startknappen. Maskinen låser luckan och börjar snurra.\n";
-                output += "Vattnet väser i rören och tvättcykeln är igång.\n";
-            }
-            else
-            {
-                output += "\nTvättmaskinen hummar redan troget. Den verkar vara mitt i ett program.\n";
+
+                return "\n[KLICK-SURRRRR]\n" +
+                       "Maskinen låser luckan och börjar snurra. Vattnet väser i rören.";
             }
 
-            return output;
+            else if (val == ConsoleKey.D2)
+            {
+                if (spelare.Ryggsack.GetAllaSaker()
+                    .Any(s => s.Namn.Equals("Boots", StringComparison.OrdinalIgnoreCase)
+                              && s.ArAktiv))
+                {
+                    return "Är du så vig att du kan putsa dina boots medan du fortfarande har dem på fötterna?";
+                }
+
+                return "Du hittar en skoborste i en låda och putsar bort leran från bootsen.\n" +
+                       "De glänser nu som nya.";
+            }
+
+            else if (val == ConsoleKey.Escape)
+            {
+                return "\nDu avbryter underhållet.";
+            }
+
+            return "";
         }
     }
 }
