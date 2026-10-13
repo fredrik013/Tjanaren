@@ -63,9 +63,11 @@ namespace Tjanaren.Modeller.Saker
             // Här ser vi till att oavsett om enumen heter Bekladnadstyp 
             // så skickar vi "pa_inne", "pa_ute" eller "pa_skydd" till rummet.
             string handlingStrang = (ArAktiv ? "pa_" : "av_") + Typ.ToString().ToLower();
-            spelare.NuvarandeRum.ReageraPaHandling(handlingStrang);
+            string reaktion = spelare.NuvarandeRum.ReageraPaHandling(handlingStrang);
 
-            return meddelande;
+            return string.IsNullOrWhiteSpace(reaktion)
+                ? meddelande
+                : meddelande + Environment.NewLine + reaktion;
         }
     }
 }
