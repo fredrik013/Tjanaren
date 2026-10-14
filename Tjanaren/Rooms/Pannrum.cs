@@ -23,7 +23,13 @@ namespace Tjanaren.Rooms
             // 1. "Naken-kontrollen"
             if (!aktivaSkydd.Any())
             {
-                // Ingen text här längre – motorn sköter hindret
+                MessageBox.Show(
+                    "Du kan inte gå in i pannrummet utan skyddsutrustning. " +
+                    "Det står decimeterdjupt med vatten där inne.",
+                    "Skyddsutrustning saknas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
+
                 return false;
             }
 
