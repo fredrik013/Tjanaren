@@ -190,6 +190,18 @@ namespace Tjanaren
                 return;
             }
 
+
+            if (tryckt == ConsoleKey.C && rtbDisplay.Visible)
+            {
+                rtbDisplay.Clear();
+                rtbDisplay.Focus();
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
+
             // --- KOMMANDON (I, S, U, T, B) ---
             if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M)
             {
