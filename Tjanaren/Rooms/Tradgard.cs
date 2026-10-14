@@ -69,7 +69,7 @@ namespace Tjanaren.Rooms
                 case var skodon when skodon == Bekladnadstyp.Inne.ToString():
                     MessageBox.Show(
                         "[EN STRÄNG RÖST FRÅN VERANDAN]\n\n" +
-                        "'Men vad sysslar du med?! Gå inte ut här och skita ner dina tofflor!'\n" +
+                        $"'Men vad sysslar du med?! Gå inte ut här och skita ner dina {s.AktivtSkodonNamn}!'\n" +
                         "'Visa lite hyfs och byt om till något som tål lera innan du sätter din fot på gräsmattan.'",
                         "Tillträde förbjudet",
                         MessageBoxButtons.OK,
@@ -79,7 +79,7 @@ namespace Tjanaren.Rooms
 
                 case var skodon when skodon == Bekladnadstyp.Ute.ToString():
                     MessageBox.Show(
-                        "Det klafsar till när bootsen möter den mjuka jorden.\n" +
+                        $"Det klafsar till när dina {s.AktivtSkodonNamn} möter den mjuka jorden.\n" +
                         "Du ser hur sulorna omedelbart täcks av lera.",
                         "Trädgården",
                         MessageBoxButtons.OK,
@@ -89,7 +89,7 @@ namespace Tjanaren.Rooms
 
                 case var skodon when skodon == Bekladnadstyp.Skydd.ToString():
                     MessageBox.Show(
-                        "Gummistövlarna klafsar tryggt i leran. Det här är deras rätta element.",
+                        $"Dina {s.AktivtSkodonNamn} klafsar tryggt i leran. Det här är deras rätta element.",
                         "Trädgården",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
