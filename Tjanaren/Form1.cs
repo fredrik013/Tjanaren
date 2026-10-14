@@ -154,7 +154,7 @@ namespace Tjanaren
 
                 if (!string.IsNullOrEmpty(resultatInv))
                 {
-                    rtbDisplay.Clear();
+                    // rtbDisplay.Clear();
                     rtbDisplay.AppendText(resultatInv);
                     lstInventory.AccessibleName = resultatInv;
                 }
@@ -201,7 +201,7 @@ namespace Tjanaren
                 }
                 else if (motor.IsInventoryOpen)
                 {
-                    rtbDisplay.Clear();
+                    // rtbDisplay.Clear();
                     lstInventory.AccessibleName = "Ryggsäck";
                     VisaRyggsack();
                 }
@@ -293,7 +293,7 @@ namespace Tjanaren
             rtbDisplay.Visible = true;
             lstInventory.Dock = DockStyle.Fill;
             rtbDisplay.Dock = DockStyle.Fill;
-            rtbDisplay.Clear();
+            // rtbDisplay.Clear();
 
             if (!string.IsNullOrEmpty(resultat))
             {

@@ -20,11 +20,19 @@ namespace Tjanaren.Rooms
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
-            // Innan spelaren kliver in på verandan, kollar vi var han kommer ifrån
+            // Kontrollera om spelaren kommer från vardagsrummet
             if (s.NuvarandeRum is Vardagsrum v)
             {
-                // Vi använder den befintliga signalen vi byggde förut!
-                v.ReageraPaHandling("vadra");
+                string reaktion = v.ReageraPaHandling("vadra");
+
+                if (!string.IsNullOrWhiteSpace(reaktion))
+                {
+                    MessageBox.Show(
+                        reaktion,
+                        "Vädring",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
             }
 
             return base.KanGaIn(s, story);
