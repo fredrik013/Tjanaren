@@ -214,8 +214,8 @@ namespace Tjanaren.Core
                 {
                     if (hoppRum.KanGaIn(_spelare, _story))
                     {
+                        logg += exitText;
                         _spelare.NuvarandeRum = hoppRum;
-                        // Här behöver vi ändra så VisaBeskrivning returnerar texten
                         logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
                     }
                     return logg;
@@ -243,6 +243,7 @@ namespace Tjanaren.Core
                     {
                         if (nastaRum.KanGaIn(_spelare, _story))
                         {
+                            logg += exitText;
                             _spelare.NuvarandeRum = nastaRum;
                             logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
                         }
