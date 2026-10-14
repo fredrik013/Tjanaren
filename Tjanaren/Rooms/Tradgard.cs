@@ -60,22 +60,52 @@ namespace Tjanaren.Rooms
             return output;
         }
 
+
         public override bool KanGaIn(Spelare s, StoryState story)
         {
             // Vi matchar mot Enum-namnen
-            string skodon = s.AktivtSkodon;
-
-            if (skodon == Bekladnadstyp.Inne.ToString())
+            switch (s.AktivtSkodon)
             {
-                // Vi stoppar spelaren tyst här. 
-                // Motorn ser 'false' och låter spelaren stå kvar på verandan.
-                return false;
-            }
+                case var skodon when skodon == Bekladnadstyp.Inne.ToString():
+                    MessageBox.Show(
+                        "[EN STRÄNG RÖST FRÅN VERANDAN]\n\n" +
+                        "'Men vad sysslar du med?! Gå inte ut här och skita ner dina tofflor!'\n" +
+                        "'Visa lite hyfs och byt om till något som tål lera innan du sätter din fot på gräsmattan.'",
+                        "Tillträde förbjudet",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Stop);
 
-            // För alla andra fall (Ute, Skydd eller Barfota) släpper vi ut dem.
-            // Texten om klafsandet i leran flyttar vi lämpligtvis till UndersokRum 
-            // eller låter Spelmotor sköta framöver.
-            return true;
+                    return false;
+
+                case var skodon when skodon == Bekladnadstyp.Ute.ToString():
+                    MessageBox.Show(
+                        "Det klafsar till när bootsen möter den mjuka jorden.\n" +
+                        "Du ser hur sulorna omedelbart täcks av lera.",
+                        "Trädgården",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return true;
+
+                case var skodon when skodon == Bekladnadstyp.Skydd.ToString():
+                    MessageBox.Show(
+                        "Gummistövlarna klafsar tryggt i leran. Det här är deras rätta element.",
+                        "Trädgården",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return true;
+
+                default:
+                    MessageBox.Show(
+                        "Du kliver ut barfota i det våta gräset. Det är kallt och klibbigt.",
+                        "Trädgården",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return true;
+            }
         }
+
     }
 }
