@@ -21,7 +21,7 @@ namespace Tjanaren.Rooms
     true,
     false
 ));
-            SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Inne, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
+            SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
         }
 
         public override bool KanGaIn(Spelare s, StoryState story)
