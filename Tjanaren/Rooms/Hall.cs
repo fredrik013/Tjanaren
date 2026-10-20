@@ -8,12 +8,12 @@ namespace Tjanaren.Rooms
         public Hall() : base("Hallen",
                     "Du kliver in i en hemtrevlig hall. Det doftar svagt av såpa och gammalt trä. " +
         "På väggen hänger en spegel och under den står en skohylla. " +
-        "Till vänster ser du en dörr och till höger verkar det finnas en trappa mot källaren." + "Rakt fram fortsätter hallen längre in i huset.")
+        "Till vänster och höger ser du dörrar och det finns en trappa mot källaren." + "Rakt fram fortsätter hallen längre in i huset.")
         {
             VisaNamn = "i hallen";
             UtgangsMeddelanden.Add("Ner", "Trappan gnisslar betänkligt under din vikt för varje steg du tar neråt...");
             OppnaUtgangar("Vaster", "Oster", "Norr", "Soder", "Ner");
-            SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor.", Bekladnadstyp.Inne, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, true));
+            SakerIRummet.Add(new Klader("Innetofflor", "Mjuka innetofflor för fina mattor.", Bekladnadstyp.Inne, Kroppsdel.Fot, BekladnadsLager.Mellan, false, true, true, "Du tar på dig tofflorna. Nu behöver du inte frysa om fötterna och finfolket kan inte klaga på några smutsiga skor.", "Du tar av dig tofflorna."));
             // I Hall-konstruktorn:
             SakerIRummet.Add(new Inredning("Spegel", "En prålig spegel med guldram. Glaset är så rent att det nästan gör ont i ögonen. " +
                 "Du ser en person som ser ut att ha sovit för lite och jobbat för mycket. En liten lortfläck på din kind lyser som en varningslampa – Herrskapet kommer få ett utbrott om de ser den."));
@@ -45,21 +45,16 @@ namespace Tjanaren.Rooms
         public override string UndersokRum(Spelare spelare, StoryState story)
         {
             string output = "";
-            var plasttofflor = SakerIRummet.Find(s => s.Namn.ToLower().Contains("tofflor"));
+            var innetofflor = SakerIRummet.Find(s => s.Namn.ToLower().Contains("tofflor"));
 
             if (!HarUndersokts)
             {
                 // Logiken är intakt: Vi gör tofflorna synliga
-                if (plasttofflor != null) plasttofflor.ArGomd = false;
+                if (innetofflor != null) innetofflor.ArGomd = false;
 
                 output += "\nDu rotar bland de få sakerna i skohyllan...\n";
-                output += "Där, längst in under en gammal tidning, hittar du ett par blå plasttofflor!\n";
+                output += "Där, längst in under en gammal tidning, hittar du ett par innetofflor!\n";
                 HarUndersokts = true;
-
-                if (plasttofflor is Klader k && k.SkyddarMotVatten)
-                {
-                    output += "De ser ut att tåla både fukt och lort – perfekta för källaren.\n";
-                }
             }
             else
             {

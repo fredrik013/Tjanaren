@@ -12,7 +12,7 @@ namespace Tjanaren.Rooms
         {
             VisaNamn = "i källaren";
             OppnaUtgangar("Upp", "Soder", "Norr", "Oster", "Vaster");
-            SakerIRummet.Add(new Klader("Innetofflor", "Mjuka innetofflor för fina mattor.", Bekladnadstyp.Inne, Kroppsdel.Fot, BekladnadsLager.Mellan, false, true, true, "Du tar på dig tofflorna. Nu behöver du inte frysa om fötterna och finfolket kan inte klaga på några smutsiga skor.", "Du tar av dig tofflorna."));
+
         }
 
 
