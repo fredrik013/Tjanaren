@@ -214,7 +214,7 @@ namespace Tjanaren
                 else if (motor.IsInventoryOpen)
                 {
                     // rtbDisplay.Clear();
-                    lstInventory.AccessibleName = "Ryggsäck";
+                    lstInventory.AccessibleName = "Inventarie";
                     VisaRyggsack();
                 }
                 else
