@@ -7,10 +7,10 @@ namespace Tjanaren.Modeller.Saker
     {
         public Action<Spelare>? Specialeffekt { get; set; }
 
-        public AllmanSak(string namn, string beskrivning, bool kanplockasupp = true, bool argomd = false)
+        public AllmanSak(string namn, string beskrivning, bool kanplockasupp = true, bool argomd = false, bool arAktiv = false)
             : base(namn, beskrivning, kanplockasupp, argomd)
         {
-
+            ArAktiv = arAktiv;
         }
         public override string Anvand(Spelare spelare, StoryState story)
         {
@@ -26,5 +26,6 @@ namespace Tjanaren.Modeller.Saker
                 return $"Du stoppar ner {Namn} i ryggsäcken igen.";
             }
         }
+
     }
 }

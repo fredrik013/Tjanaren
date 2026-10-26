@@ -30,6 +30,8 @@
 
         public bool HarNyckel { get; set; } = false;
 
+        public bool SkurvattenKlart { get; set; } = false;
+
         public int AntalOvertramp { get; set; } = 0; // 3 = Hejdå!
 
         public bool GrasetKlippt { get; set; } = false;

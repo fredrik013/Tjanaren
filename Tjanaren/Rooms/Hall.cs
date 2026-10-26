@@ -41,7 +41,6 @@ namespace Tjanaren.Rooms
             return true;
         }
 
-
         public override string UndersokRum(Spelare spelare, StoryState story)
         {
             string output = "";

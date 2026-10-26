@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tjanaren.Core;
 using Tjanaren.Modeller.Saker;
 namespace Tjanaren.Rooms
 {
@@ -21,18 +22,117 @@ arAktiv: true
             SakerIRummet.Add(new Redskap(
                             "Mopp",
                             "En gammal mopp som ser ut att ha sett bättre dagar.",
-                            arAktiv: true                            
+                            arAktiv: true
                         ));
             SakerIRummet.Add(new Redskap(
                             "Sopborste",
                             "En sopborste som ser ut att ha använts flitigt.",
-                            arAktiv: true                            
+                            arAktiv: true
                         ));
             SakerIRummet.Add(new Redskap(
                             "Dammsugare",
                             "En dammsugare som kan användas för att dammsuga de fina mattorna med.",
-                            arAktiv: true                            
+                            arAktiv: true
                         ));
+            SakerIRummet.Add(new AllmanSak(
+                            "Skurmedel",
+                            "En flaska skurmedel som ska blandas ut med vatten.",
+                            argomd: true,
+                            arAktiv: true
+                        ));
+        }
+        public override bool HarUnderhallsmeny => true;
+        private bool _hinkHarVatten = false;
+
+
+        public override string UndersokRum(Spelare spelare, StoryState story)
+        {
+            string output = "";
+            var skurmedel = SakerIRummet.Find(s => s.Namn.ToLower().Contains("skurmedel"));
+
+            if (!HarUndersokts)
+            {
+                // Logiken är intakt: Vi gör skurmedlet synligt
+                if (skurmedel != null) skurmedel.ArGomd = false;
+
+                output += "\nDu rotar i skåpet under bänken...\n";
+                output += "Där, längst in bland en massa skräp, hittar du en flaska med skurmedel!\n";
+                HarUndersokts = true;
+            }
+            else
+            {
+                output += "\nDu ser inget mer av värde i skåpet, bara meningslöst skräp.\n";
+            }
+
+            // HÄR ÄR RÄDDNINGEN: Vi returnerar hela strängen till spelmotorn
+            return output;
+        }
+
+        public override string UtforUnderhall(Spelare spelare, StoryState story)
+        {
+            string meny = "--- UNDERHÅLL I STÄDSKRUBBEN ---\n";
+            meny += "1. Fyll skurhinken med vatten\n";
+
+            meny += "2. Blanda skurmedel med vatten\n";
+
+            meny += "3. Skölj rent hinken\n";
+
+            meny += "Escape. Avbryt\n";
+            return meny;
+        }
+
+        public override string HanteraUnderhallsval(
+ConsoleKey val,
+Spelare spelare,
+StoryState story)
+        {
+            if (val == ConsoleKey.D1)
+            {
+                // Kontrollera att spelaren håller hinken i handen.
+                if (!spelare.Ryggsack.GetAllaSaker()
+                    .Any(s => s.Namn.Equals("Hink", StringComparison.OrdinalIgnoreCase)
+                              && s.ArAktiv))
+                {
+                    return "\nDu måste hålla hinken i handen för att kunna fylla den med vatten.";
+                }
+
+                // Kontrollera om skurvattnet redan är färdigblandat.
+                if (story.SkurvattenKlart)
+                {
+                    return "\nHinken innehåller redan färdigblandat skurvatten.";
+                }
+
+                // Kontrollera om hinken redan innehåller vatten.
+                if (_hinkHarVatten)
+                {
+                    return "\nHinken är redan fylld med vatten.";
+                }
+
+                // Fyll hinken.
+                _hinkHarVatten = true;
+
+                return "\nDu ställer hinken under kranen och fyller den med vatten.";
+            }
+
+            else if (val == ConsoleKey.D2)
+            {
+                if (spelare.Ryggsack.GetAllaSaker()
+                    .Any(s => s.Namn.Equals("Boots", StringComparison.OrdinalIgnoreCase)
+                              && s.ArAktiv))
+                {
+                    return "Är du så vig att du kan putsa dina boots medan du fortfarande har dem på fötterna?";
+                }
+
+                return "Du hittar en skoborste i en låda och putsar bort leran från bootsen.\n" +
+                       "De glänser nu som nya.";
+            }
+
+            else if (val == ConsoleKey.Escape)
+            {
+                return "\nDu avbryter underhållet.";
+            }
+
+            return "";
         }
     }
 }
