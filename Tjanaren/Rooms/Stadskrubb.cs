@@ -116,15 +116,30 @@ StoryState story)
 
             else if (val == ConsoleKey.D2)
             {
-                if (spelare.Ryggsack.GetAllaSaker()
-                    .Any(s => s.Namn.Equals("Boots", StringComparison.OrdinalIgnoreCase)
-                              && s.ArAktiv))
+                // Kontrollera att skurvattnet inte redan är färdigblandat.
+                if (story.SkurvattenKlart)
                 {
-                    return "Är du så vig att du kan putsa dina boots medan du fortfarande har dem på fötterna?";
+                    return "\nSkurvattnet är redan färdigblandat.";
                 }
 
-                return "Du hittar en skoborste i en låda och putsar bort leran från bootsen.\n" +
-                       "De glänser nu som nya.";
+                // Kontrollera att hinken innehåller vatten.
+                if (!_hinkHarVatten)
+                {
+                    return "\nDu måste fylla hinken med vatten först.";
+                }
+
+                // Kontrollera att spelaren håller skurmedlet.
+                if (!spelare.Ryggsack.GetAllaSaker()
+                    .Any(s => s.Namn.Equals("Skurmedel", StringComparison.OrdinalIgnoreCase)
+                              && s.ArAktiv))
+                {
+                    return "\nDu måste ha skurmedlet i handen för att kunna blanda skurvattnet.";
+                }
+
+                // Blanda skurvattnet.
+                story.SkurvattenKlart = true;
+
+                return "\nDu häller skurmedlet i hinken och rör om. Skurvattnet är nu färdigt att användas.";
             }
 
             else if (val == ConsoleKey.Escape)
