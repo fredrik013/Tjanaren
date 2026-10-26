@@ -1,4 +1,4 @@
-namespace Stugan
+namespace Tjanaren
 {
     internal static class Program
     {
