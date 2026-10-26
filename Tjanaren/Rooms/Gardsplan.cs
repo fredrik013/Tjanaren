@@ -12,8 +12,7 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new Redskap(
                             "Spade",
                             "En rostig men rejäl spade.",
-                            true,
-                            false
+                            arAktiv: true
                         ));
         }
 

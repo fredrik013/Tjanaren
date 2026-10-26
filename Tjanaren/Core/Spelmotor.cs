@@ -277,10 +277,14 @@ namespace Tjanaren.Core
 
         // En ny liten hjälpreda som faktiskt flyttar saken när du valt i listan
         public string VerkstallUpplockning(Spelsak valdSak)
-        {
+        {           
             if (valdSak != null)
             {
-                _spelare.Ryggsack.LaggTill(valdSak);
+                if (valdSak.ArAktiv == true)
+                {
+                    valdSak.ArAktiv = true;
+                }
+                    _spelare.Ryggsack.LaggTill(valdSak);
                 _spelare.NuvarandeRum.SakerIRummet.Remove(valdSak);
                 return $"\nDu plockar upp: {valdSak.Namn}.";
             }
