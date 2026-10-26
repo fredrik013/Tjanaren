@@ -5,11 +5,12 @@ namespace Tjanaren.Modeller.Saker
 {
     public class Redskap : Spelsak
     {
-        public Redskap(string namn, string beskrivning, bool kanPlockasUpp = true, bool arGomd = false)
+        public Redskap(string namn, string beskrivning, bool kanPlockasUpp = true, bool arGomd = false, bool arAktiv = false)
        : base(namn, beskrivning)
         {
             KanPlockasUpp = kanPlockasUpp;
             ArGomd = arGomd;
+            ArAktiv = arAktiv;
         }
 
         public override string Anvand(Spelare spelare, StoryState story)

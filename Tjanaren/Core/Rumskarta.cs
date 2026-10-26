@@ -66,7 +66,6 @@ namespace Tjanaren.Core
             matkallare.Plats = new Position(0, 2, -1);
             karta.LaggTillRum(matkallare.Plats, matkallare);
 
-
             Pannrum pannrum = new Pannrum();
             pannrum.Plats = new Position(1, 1, -1);
             karta.LaggTillRum(pannrum.Plats, pannrum);
@@ -75,12 +74,13 @@ namespace Tjanaren.Core
             tjanarrum.Plats = new Position(0, 0, -1);
             karta.LaggTillRum(tjanarrum.Plats, tjanarrum);
 
-
             Tvattstuga tvattstuga = new Tvattstuga();
             tvattstuga.Plats = new Position(-1, 1, -1);
             karta.LaggTillRum(tvattstuga.Plats, tvattstuga);
 
-
+            Stadskrubb stadskrubb = new Stadskrubb();
+            stadskrubb.Plats = new Position(-2, 1, -1);
+            karta.LaggTillRum(stadskrubb.Plats, stadskrubb);
 
             return gardsplan;
         }

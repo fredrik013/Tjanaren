@@ -104,15 +104,7 @@ namespace Tjanaren.Core
 
             if (sak is Redskap redskap)
             {
-                string svar = redskap.Anvand(spelare, story);
-                if (redskap.ArAktiv && inv != null)
-                {
-                    foreach (var r in inv.GetAllaSaker().OfType<Redskap>())
-                    {
-                        if (r != redskap) r.ArAktiv = false;
-                    }
-                }
-                return svar;
+                return redskap.Anvand(spelare, story);
             }
 
             if (sak is AllmanSak allmanSak)
