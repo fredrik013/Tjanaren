@@ -16,26 +16,22 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new Redskap(
                             "Hink",
                             "En hink som antagligen ska användas vid städning.",
-                            true,
-                            false
+arAktiv: true
                         ));
             SakerIRummet.Add(new Redskap(
                             "Mopp",
                             "En gammal mopp som ser ut att ha sett bättre dagar.",
-                            true,
-                            false
+                            arAktiv: true                            
                         ));
             SakerIRummet.Add(new Redskap(
                             "Sopborste",
                             "En sopborste som ser ut att ha använts flitigt.",
-                            true,
-                            false
+                            arAktiv: true                            
                         ));
             SakerIRummet.Add(new Redskap(
                             "Dammsugare",
                             "En dammsugare som kan användas för att dammsuga de fina mattorna med.",
-                            true,
-                            false
+                            arAktiv: true                            
                         ));
         }
     }
