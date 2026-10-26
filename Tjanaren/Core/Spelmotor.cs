@@ -280,13 +280,13 @@ namespace Tjanaren.Core
         {           
             if (valdSak != null)
             {
-                if (valdSak.ArAktiv == true)
-                {
-                    valdSak.ArAktiv = true;
-                }
                     _spelare.Ryggsack.LaggTill(valdSak);
                 _spelare.NuvarandeRum.SakerIRummet.Remove(valdSak);
-                return $"\nDu plockar upp: {valdSak.Namn}.";
+                if (valdSak.ArAktiv)
+                {
+                    return $"\nDu plockar upp {valdSak.Namn} och håller i handen.";
+                }
+                return $"\nDu plockar upp {valdSak.Namn} och lägger i ryggsäcken.";
             }
             return "\nInget valdes.";
         }
