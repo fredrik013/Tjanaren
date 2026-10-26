@@ -142,6 +142,29 @@ StoryState story)
                 return "\nDu häller skurmedlet i hinken och rör om. Skurvattnet är nu färdigt att användas.";
             }
 
+            else if (val == ConsoleKey.D3)
+            {
+                // Kontrollera att spelaren håller hinken.
+                if (!spelare.Ryggsack.GetAllaSaker()
+                    .Any(s => s.Namn.Equals("Hink", StringComparison.OrdinalIgnoreCase)
+                              && s.ArAktiv))
+                {
+                    return "\nDu måste hålla hinken i handen för att kunna skölja den.";
+                }
+
+                // Kontrollera om hinken redan är tom.
+                if (!_hinkHarVatten && !story.SkurvattenKlart)
+                {
+                    return "\nHinken är redan tom och behöver inte sköljas.";
+                }
+
+                // Töm och skölj hinken.
+                _hinkHarVatten = false;
+                story.SkurvattenKlart = false;
+
+                return "\nDu tömmer hinken i hon och sköljer den noggrant med rent vatten. Hinken är nu ren och tom.";
+            }
+
             else if (val == ConsoleKey.Escape)
             {
                 return "\nDu avbryter underhållet.";
