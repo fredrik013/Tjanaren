@@ -15,6 +15,17 @@ namespace Tjanaren.Rooms
             VisaNamn = "i källaren";
             OppnaUtgangar("Upp", "Soder", "Norr", "Oster", "Vaster");
 
+            SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
+            SakerIRummet.Add(new Redskap(
+                "Hink",
+                "En hink som antagligen ska användas vid städning.",
+arAktiv: true
+            ));
+            SakerIRummet.Add(new Redskap(
+                            "Mopp",
+                            "En gammal mopp som ser ut att ha sett bättre dagar.",
+                            arAktiv: true
+                        ));
         }
 
 
@@ -99,6 +110,11 @@ namespace Tjanaren.Rooms
 
         public override string UtforUnderhall(Spelare spelare, StoryState story)
         {
+            // TILLFÄLLIG TESTKOD – TAS BORT EFTER TESTERNA
+            story.RorArLagat = true;
+            story.SkurvattenKlart = true;
+            story.HeltRentIKallaren = false;
+
             var mopp = spelare.Ryggsack.GetAllaSaker()
     .OfType<Redskap>()
     .FirstOrDefault(r => r.Namn == "Mopp" && r.ArAktiv);
