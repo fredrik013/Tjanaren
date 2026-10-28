@@ -8,11 +8,7 @@
 
         public bool HarBlivitVarnadOmRor { get; set; } = false;
 
-        public bool GrovstadatPannrum { get; set; } = false;
-
         public bool HeltRentIKallaren { get; set; } = false;
-
-        public bool MoppArTvattad { get; set; } = false;
 
         public bool TvattmaskinArIgang { get; set; }
 
@@ -37,10 +33,6 @@
         public bool GrasetKlippt { get; set; } = false;
 
         public bool ArNyduschad { get; set; } = false;
-
-        public bool HarPlastratOmFinger { get; set; } = false;
-
-        public bool HarSkuritSigVidRakning { get; set; } = false;
 
         public bool HarAnvantSpabad { get; set; } = false;
 
@@ -67,21 +59,11 @@
                 case var _ when HarAtitBrod && !RorArLagat:
                     return "Du ser misstänkt mätt ut för att inte ha rört ett finger i källaren än!";
 
-                case var _ when HarSkuritSigVidRakning:
-                    return "Du blöder ymnigt från hakan. Herr von Krångel ser inte imponerad ut över din hantering av hans hyvel.";
-
-                case var _ when HarPlastratOmFinger && !ArNyduschad:
-                    return "Fingret är omplåstrat, men du luktar fortfarande som en dränkt källarråtta. Dags för en dusch?";
 
                 // Prioritet 3: Delmål i källaren
-                case var _ when RorArLagat && !GrovstadatPannrum:
-                    return "Läckan är stoppad, men det ser ut som en krigszon. Fram med skyffeln!";
 
                 case var _ when RorArLagat:
                     return "Röret är lagat, men du har lämnat en rökig röra efter dig.";
-
-                case var _ when HarHittatRortang:
-                    return "Du har rörtången i säkert förvar. Nu är det väl bara att hitta pannrummet och börja jobba?";
 
                 // Standard: Om ingenting har hänt än
                 default:
