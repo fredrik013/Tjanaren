@@ -110,14 +110,9 @@ arAktiv: true
 
         public override string UtforUnderhall(Spelare spelare, StoryState story)
         {
-            // TILLFÄLLIG TESTKOD – TAS BORT EFTER TESTERNA
-            story.RorArLagat = true;
-            story.SkurvattenKlart = true;
-            story.HeltRentIKallaren = false;
-
             var mopp = spelare.Ryggsack.GetAllaSaker()
-    .OfType<Redskap>()
-    .FirstOrDefault(r => r.Namn == "Mopp" && r.ArAktiv);
+     .OfType<Redskap>()
+     .FirstOrDefault(r => r.Namn == "Mopp" && r.ArAktiv);
 
             var hink = spelare.Ryggsack.GetAllaSaker()
                 .OfType<Redskap>()
