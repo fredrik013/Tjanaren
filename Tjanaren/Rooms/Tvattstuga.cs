@@ -5,8 +5,11 @@ namespace Tjanaren.Rooms
 {
     public class Tvattstuga : Rum
     {
-        public Tvattstuga() : base("Tvättstugan", "Du har kommit in i en tvättstuga. Här råder det god ordning och det luktar starkt av tvättmedel.Här finns det både tvättmaskin och torktumlare..")
+        private readonly WorldMap _karta;
+
+        public Tvattstuga(WorldMap karta) : base("Tvättstugan", "Du har kommit in i en tvättstuga. Här råder det god ordning och det luktar starkt av tvättmedel.Här finns det både tvättmaskin och torktumlare.")
         {
+            _karta = karta;
             VisaNamn = "i tvättstugan";
             OppnaUtgangar("Oster", "Vaster");
 
@@ -22,9 +25,9 @@ namespace Tjanaren.Rooms
             string meny = "--- UNDERHÅLL I TVÄTTSTUGAN ---\n";
             meny += "1. Starta tvättmaskinen\n";
 
-                meny += "2. Putsa dina smutsiga boots\n";
-            
-                        meny += "Escape. Avbryt\n";
+            meny += "2. Putsa dina smutsiga boots\n";
+
+            meny += "Escape. Avbryt\n";
             return meny;
         }
 
@@ -33,6 +36,10 @@ namespace Tjanaren.Rooms
     Spelare spelare,
     StoryState story)
         {
+            var mopp = spelare.Ryggsack.GetAllaSaker()
+                .OfType<Redskap>()
+                .FirstOrDefault(r => r.Namn == "Mopp");
+
             if (val == ConsoleKey.D1)
             {
                 if (story.TvattmaskinArIgang)
@@ -40,9 +47,17 @@ namespace Tjanaren.Rooms
                     return "Tvättmaskinen är redan igång.";
                 }
 
-                story.TvattmaskinArIgang = true;
+                if (mopp == null)
+                    return "Du har inget som behöver tvättas.";
 
-                return "\n[KLICK-SURRRRR]\n" +
+                if (mopp.ArRen)
+                    return "Det finns ingen anledning att tvätta något som redan är rent.";
+
+                spelare.Ryggsack.GetAllaSaker().Remove(mopp);
+                story.TvattmaskinArIgang = true;
+                _ = AvslutaTvattAsync(mopp, story);
+
+                return "\nDu slänger in den skitiga moppen i tvättmaskinen, väljer program och trycker på start. [KLICK-SURRRRR]\n" +
                        "Maskinen låser luckan och börjar snurra. Vattnet väser i rören.";
             }
 
@@ -65,6 +80,21 @@ namespace Tjanaren.Rooms
             }
 
             return "";
+        }
+
+        private async Task AvslutaTvattAsync(Redskap mopp, StoryState story)
+        {
+            await Task.Delay(TimeSpan.FromMinutes(2));
+
+            mopp.ArRen = true;
+
+            if (_karta.HamtaRum(new Position(-2, 1, -1))
+                is Stadskrubb stadskrubb)
+            {
+                stadskrubb.SakerIRummet.Add(mopp);
+            }
+
+            story.TvattmaskinArIgang = false;
         }
     }
 }

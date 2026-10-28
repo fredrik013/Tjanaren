@@ -74,7 +74,7 @@ namespace Tjanaren.Core
             tjanarrum.Plats = new Position(0, 0, -1);
             karta.LaggTillRum(tjanarrum.Plats, tjanarrum);
 
-            Tvattstuga tvattstuga = new Tvattstuga();
+            Tvattstuga tvattstuga = new Tvattstuga(karta);
             tvattstuga.Plats = new Position(-1, 1, -1);
             karta.LaggTillRum(tvattstuga.Plats, tvattstuga);
 
