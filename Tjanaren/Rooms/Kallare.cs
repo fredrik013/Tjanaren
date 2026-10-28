@@ -1,6 +1,8 @@
 ﻿using Tjanaren.Core;
 using Tjanaren.Modeller.Saker;
 using static System.Console;
+using static System.Windows.Forms.LinkLabel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Tjanaren.Rooms
 {
@@ -93,6 +95,55 @@ namespace Tjanaren.Rooms
 
             // Retur till motorn så JAWS får något att bita i
             return output;
+        }
+
+        public override string UtforUnderhall(Spelare spelare, StoryState story)
+        {
+            var mopp = spelare.Ryggsack.GetAllaSaker()
+    .OfType<Redskap>()
+    .FirstOrDefault(r => r.Namn == "Mopp" && r.ArAktiv);
+
+            var hink = spelare.Ryggsack.GetAllaSaker()
+                .OfType<Redskap>()
+                .FirstOrDefault(r => r.Namn == "Hink" && r.ArAktiv);
+
+            var vattentaligaSkor = spelare.Ryggsack.GetAllaSaker()
+    .OfType<Klader>()
+    .FirstOrDefault(k => k.ArAktiv && k.SkyddarMotVatten);
+
+            switch (true)
+            {
+                case true when story.HeltRentIKallaren:
+                    return "\nDu ser dig omkring och konstaterar att källaren redan är ordentligt städad. Här finns inget mer att göra.";
+
+                case true when !story.RorArLagat:
+                    return "\nDet forsande vattnet gör det omöjligt att städa ordentligt. Du måste åtgärda problemet först.";
+
+                case true when !story.SkurvattenKlart:
+                    return "\nDu ser dig omkring. Det här kräver en ordentlig rengöring, men du har ännu inte gjort alla förberedelser.";
+
+                case true when vattentaligaSkor == null:
+                    return "\nDu behöver lämpliga skor som tål vatten för det här uppdraget.";
+
+                case true when hink == null:
+                    return "\nDu behöver något att ha rengöringsvattnet i. Se också till att ha utrustningen framme när du börjar.";
+
+                case true when mopp == null:
+                    return "\nDet här golvet blir inte rent av sig självt. Du behöver något lämpligt att rengöra det med, och du måste ha det framme.";
+
+                default:
+                    story.HeltRentIKallaren = true;
+                    mopp.ArRen = false;
+
+                    return "\nDu tar itu med det omfattande städarbetet. " +
+                           "Det smutsiga vattnet skvalpar medan du arbetar dig fram över källargolvet.\n" +
+                           "Du skrubbar, skurar och kämpar dig vidare in i pannrummet, " +
+                           "där resterna efter vattenläckan fortfarande gör sig påminda.\n" +
+                           "Efter ett rejält arbetspass är både källaren och pannrummet äntligen rena.\n" +
+                           "Du betraktar resultatet med tillfredsställelse. " +
+                           "Moppen däremot har sett betydligt bättre dagar.";
+            }
+
         }
     }
 }
