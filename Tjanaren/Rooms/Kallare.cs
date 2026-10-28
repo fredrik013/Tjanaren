@@ -64,6 +64,9 @@ arAktiv: true
                 .OfType<Klader>()
                 .FirstOrDefault(p => p.ArAktiv && (p.Typ == Bekladnadstyp.Ute || p.Typ == Bekladnadstyp.Inne));
 
+            if (story.HeltRentIKallaren)
+                return "\nKällargolvet är rent och torrt. Inte ett spår av den tidigare översvämningen finns kvar.\n";
+
             // 2. Switchen som bygger upp texten baserat på fotbeklädnad
             switch (p)
             {
@@ -83,25 +86,6 @@ arAktiv: true
                     string ljudTät = k.Typ == Bekladnadstyp.Ute ? "dunsar tungt" : "ploppar hemtrevligt";
                     output += $"\nDina skor {ljudTät} mot betongen och håller dina fötter torra.\n";
                     break;
-            }
-
-            // 3. Själva sökandet efter tofflorna på hyllan
-            if (!HarUndersokts)
-            {
-                output += "\nDu undersöker den torra hyllan högt upp på väggen.\n";
-                output += "Dina fingrar nuddar något mjukt... det är ett par innetofflor!\n";
-
-                if (tofflor != null) tofflor.ArGomd = false;
-                HarUndersokts = true;
-                output += "\nEtt svagt, belåtet mumlande hörs från mörkret.\n";
-            }
-            else if (tofflor != null && !tofflor.ArGomd)
-            {
-                output += "\nDu ser innetofflorna ligga på hyllan där du hittade dem.\n";
-            }
-            else
-            {
-                output += "\nDu letar noga på hyllorna men hittar inget mer än damm och spindelväv.\n";
             }
 
             // Retur till motorn så JAWS får något att bita i
