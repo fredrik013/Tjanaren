@@ -100,8 +100,7 @@ namespace Tjanaren.Core
                     return "";
 
                 case ConsoleKey.S:
-                    output = _spelare.VisaStatus(_story);
-                    output += "\n\nTryck på valfri tangent för att återgå till rummet...";
+                    output = _spelare.VisaStatus(_story);                    
                     break;
 
                 case ConsoleKey.U:
