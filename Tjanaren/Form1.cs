@@ -202,8 +202,30 @@ namespace Tjanaren
             }
 
 
-            // --- KOMMANDON (I, S, U, T, B) ---
-            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M)
+            // --- OBJEKTUNDERSÖKNING ---
+            if (motor.IsExaminingObject &&
+    !(rtbDisplay.Focused &&
+      (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+       e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)))
+            {
+                ConsoleKey menyTangent = tryckt;
+
+                if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
+                {
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 +
+                        (int)(e.KeyCode - Keys.NumPad1));
+                }
+
+                string resultat = motor.HanteraInmatning(menyTangent);
+                VisaRum(resultat);
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+            
+                // --- KOMMANDON (I, S, U, T, B) ---
+                if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M || tryckt == ConsoleKey.O)
             {
                 string resultatKommando = motor.HanteraInmatning(tryckt);
 

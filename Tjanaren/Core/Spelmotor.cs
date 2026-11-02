@@ -18,6 +18,9 @@ namespace Tjanaren.Core
         private bool _isRoomMenuOpen = false;
         public bool IsRoomMenuOpen => _isRoomMenuOpen;
 
+        private bool _isExaminingObject = false;
+        public bool IsExaminingObject => _isExaminingObject;
+
         // Nytt: Hantering av föremålsval
         private bool _isSelectingItem = false;
         public bool IsSelectingItem => _isSelectingItem;
@@ -56,6 +59,11 @@ namespace Tjanaren.Core
         public string HanteraInmatning(ConsoleKey tangent)
         {
             string output = "";
+
+            if (_isExaminingObject)
+            {
+                return HanteraObjektundersokning(tangent);
+            }
 
             // Om vi är i föremålsvalsläge, hantera det först
             if (_isSelectingItem)
@@ -129,6 +137,20 @@ namespace Tjanaren.Core
                 case ConsoleKey.M:
                     output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
                     _isRoomMenuOpen = _spelare.NuvarandeRum.HarUnderhallsmeny;
+                    break;
+
+                case ConsoleKey.O:
+                    var objekt = _spelare.NuvarandeRum.VisaObjektLista();
+
+                    if (objekt.Count == 0)
+                    {
+                        output = "Det finns inget här att undersöka.";
+                    }
+                    else
+                    {
+                        _isExaminingObject = true;
+                        output = VisaObjektmeny(objekt);
+                    }
                     break;
 
                 case ConsoleKey.UpArrow:
@@ -289,6 +311,42 @@ namespace Tjanaren.Core
                 return $"\nDu plockar upp {valdSak.Namn} och lägger i ryggsäcken.";
             }
             return "\nInget valdes.";
+        }
+
+        private string VisaObjektmeny(List<Spelsak> objekt)
+        {
+            string output = "Vad vill du undersöka?\n";
+
+            for (int i = 0; i < objekt.Count; i++)
+            {
+                output += $"{i + 1}. {objekt[i].Namn}\n";
+            }
+
+            output += "\nEscape för att gå tillbaka.";
+            return output;
+        }
+
+        private string HanteraObjektundersokning(ConsoleKey tangent)
+        {
+            if (tangent == ConsoleKey.Escape)
+            {
+                _isExaminingObject = false;
+                return _spelare.NuvarandeRum.VisaBeskrivning();
+            }
+
+            var objekt = _spelare.NuvarandeRum.VisaObjektLista();
+
+            int val = (int)tangent - (int)ConsoleKey.D1;
+
+            if (val >= 0 && val < objekt.Count)
+            {
+                _isExaminingObject = false;
+
+                return _spelare.NuvarandeRum.UndersokValdSak(
+                    objekt[val], _spelare);
+            }
+
+            return VisaObjektmeny(objekt);
         }
     }
 }
