@@ -14,24 +14,13 @@ namespace Tjanaren.Rooms
         {
             VisaNamn = "i källaren";
             OppnaUtgangar("Upp", "Soder", "Norr", "Oster", "Vaster");
-
-            SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
-            SakerIRummet.Add(new Redskap(
-                "Hink",
-                "En hink som antagligen ska användas vid städning.",
-arAktiv: true
-            ));
-            SakerIRummet.Add(new Redskap(
-                            "Mopp",
-                            "En gammal mopp som ser ut att ha sett bättre dagar.",
-                            arAktiv: true
-                        ));
         }
 
 
         public override bool KanGaIn(Spelare s, StoryState story)
         {
-            if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
+            if (s.NuvarandeRum is Hall d)
+                if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
                 MessageBox.Show(
                     "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +

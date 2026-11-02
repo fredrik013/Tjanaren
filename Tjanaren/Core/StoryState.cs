@@ -30,7 +30,7 @@
 
         public int AntalOvertramp { get; set; } = 0; // 3 = Hejdå!
 
-        public bool GrasetKlippt { get; set; } = false;
+        public bool HarFixatTradgard { get; set; } = false;
 
         public bool ArNyduschad { get; set; } = false;
 
@@ -52,7 +52,7 @@
                     return $"Du doftar misstänkt mycket malt. Finfolket ser skeptiska ut, men du har en chans kvar. (Varningar: {AntalOvertramp}/3)";
 
                 // Prioritet 1: Allt är klart
-                case var _ when RorArLagat && HeltRentIKallaren && GrasetKlippt && ArNyduschad:
+                case var _ when RorArLagat && HeltRentIKallaren && HarFixatTradgard && ArNyduschad:
                     return "Du doftar lavendel och röret är tyst. Glasverandan väntar.";
 
                 // Prioritet 2: Specifika hån (t.ex. brödtjuven)
@@ -61,6 +61,8 @@
 
 
                 // Prioritet 3: Delmål i källaren
+                case var _ when RorArLagat && HeltRentIKallaren:
+                    return "Röret är lagat och källaren är skinande ren. Herr von Krångel får leta efter något annat att klaga på.";
 
                 case var _ when RorArLagat:
                     return "Röret är lagat, men du har lämnat en rökig röra efter dig.";

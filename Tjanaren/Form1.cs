@@ -8,7 +8,7 @@ namespace Tjanaren
         RichTextBox rtbDisplay;
         ListBox lstInventory;
         ListBox lstRoomItems;
-        ListBox lstMaintenance;
+
         NavButton btnNav;
         Spelare spelare;
         Spelmotor motor;
@@ -33,14 +33,7 @@ namespace Tjanaren
                 Font = new Font("Consolas", 12),
                 TabIndex = 2
             };
-            lstMaintenance = new ListBox
-            {
-                Dock = DockStyle.Fill,
-                Visible = false,
-                Font = new Font("Consolas", 12),
-                TabIndex = 5,
-                AccessibleName = "Underhåll"
-            };
+
             lstRoomItems = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -61,7 +54,6 @@ namespace Tjanaren
             this.Controls.Add(lstRoomItems);
             this.Controls.Add(rtbDisplay);
             this.Controls.Add(btnNav);
-            this.Controls.Add(lstMaintenance);
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
 
@@ -86,39 +78,26 @@ namespace Tjanaren
             }
             ConsoleKey tryckt = (ConsoleKey)e.KeyCode;
 
-            // --- FÖREMÅLSVAL (NYTT) ---
-            if (motor.IsSelectingItem && lstInventory.Visible)
+            // --- NUMRERAT UP PLOCKNINGSVAL ---
+            if (motor.IsSelectingItem &&
+                !(rtbDisplay.Focused &&
+                  (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+                   e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)))
             {
-                if (tryckt == ConsoleKey.UpArrow || tryckt == ConsoleKey.DownArrow)
+                ConsoleKey menyTangent = tryckt;
+
+                if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
                 {
-                    motor.HanteraInmatning(tryckt);
-                    VisaForemalsvalet();
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 +
+                        (int)(e.KeyCode - Keys.NumPad1));
                 }
 
-                if (tryckt == ConsoleKey.Enter)
-                {
-                    string resultat = motor.HanteraInmatning(tryckt);
+                string resultat = motor.HanteraInmatning(menyTangent);
+                VisaRum(resultat);
 
-                    if (!motor.IsSelectingItem)
-                    {
-                        VisaRum(resultat);
-                    }
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
-                }
-
-                if (tryckt == ConsoleKey.Escape)
-                {
-                    string resultat = motor.HanteraInmatning(tryckt);
-                    VisaRum(resultat);
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
-                }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
             }
 
             // --- NAVIGATION ---
@@ -202,14 +181,36 @@ namespace Tjanaren
             }
 
 
-            // --- KOMMANDON (I, S, U, T, B) ---
-            if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M)
+            // --- OBJEKTUNDERSÖKNING ---
+            if (motor.IsExaminingObject &&
+    !(rtbDisplay.Focused &&
+      (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+       e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)))
+            {
+                ConsoleKey menyTangent = tryckt;
+
+                if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
+                {
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 +
+                        (int)(e.KeyCode - Keys.NumPad1));
+                }
+
+                string resultat = motor.HanteraInmatning(menyTangent);
+                VisaRum(resultat);
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+            
+                // --- KOMMANDON (I, S, U, T, B) ---
+                if (tryckt == ConsoleKey.I || tryckt == ConsoleKey.S || tryckt == ConsoleKey.U || tryckt == ConsoleKey.T || tryckt == ConsoleKey.B || tryckt == ConsoleKey.M || tryckt == ConsoleKey.O)
             {
                 string resultatKommando = motor.HanteraInmatning(tryckt);
 
                 if (motor.IsSelectingItem)
                 {
-                    VisaForemalsvalet();
+                    VisaRum(resultatKommando);
                 }
                 else if (motor.IsInventoryOpen)
                 {
@@ -223,23 +224,7 @@ namespace Tjanaren
                 }
             }
         }
-
-        private void VisaForemalsvalet()
-        {
-            btnNav.Visible = false;
-            rtbDisplay.Visible = false;
-            lstInventory.Visible = true;
-
-            lstInventory.Items.Clear();
-            foreach (var sak in motor.ItemsToSelect)
-            {
-                lstInventory.Items.Add(sak.Namn);
-            }
-
-            lstInventory.SelectedIndex = motor.SelectedItemIndex;
-            lstInventory.Focus();
-        }
-
+        
         private void VisaRyggsack()
         {
             btnNav.Visible = false;
@@ -271,32 +256,7 @@ namespace Tjanaren
             }
 
             lstInventory.Focus();
-        }
-
-        private void VisaUnderhall(IEnumerable<string> alternativ)
-        {
-            btnNav.Visible = false;
-            lstInventory.Visible = false;
-
-            lstMaintenance.Dock = DockStyle.Fill;
-            rtbDisplay.Dock = DockStyle.Bottom;
-            rtbDisplay.Height = 100;
-
-            rtbDisplay.Visible = true;
-            lstMaintenance.Visible = true;
-
-            lstMaintenance.Items.Clear();
-
-            foreach (string alternativText in alternativ)
-            {
-                lstMaintenance.Items.Add(alternativText);
-            }
-
-            if (lstMaintenance.Items.Count > 0)
-                lstMaintenance.SelectedIndex = 0;
-
-            lstMaintenance.Focus();
-        }
+        }           
 
         private void VisaRum(string resultat)
         {

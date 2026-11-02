@@ -1,5 +1,6 @@
 ﻿using Tjanaren.Modeller.Saker;
 using Tjanaren.Rooms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Tjanaren.Core
 {
@@ -77,9 +78,6 @@ namespace Tjanaren.Core
             // Vi skapar en variabel för att bygga upp status-texten
             string statusText = "\n--- DIN STATUS ---\n";
 
-            // Hälsa
-            statusText += (ArSkadad ? "Mående: Du är skadad och rör dig tungt." : "Mående: Du känner dig pigg och oskadd.") + "\n";
-
             // Hitta aktiva kläder i ryggsäcken
             var allaKlader = Ryggsack.GetAllaSaker().OfType<Klader>().Where(k => k.ArAktiv).ToList();
 
@@ -107,9 +105,11 @@ namespace Tjanaren.Core
             statusText += $"På fötterna: {fotter}\n";
 
             statusText += "------------------\n";
-            statusText += $"Uppdrag: {story.GetStatusBeskrivning()}\n";
-            statusText += "------------------\n";
-
+            statusText += "\n--- UPPDRAGSSTATUS ---\n";
+            statusText += $"Laga röret: {(story.RorArLagat ? "Klart" : "Återstår")}\n";
+            statusText += $"Städa hallen: {(story.HallenArSkurad ? "Klart" : "Återstår")}\n";
+            statusText += $"Städa källaren: {(story.HeltRentIKallaren ? "Klart" : "Återstår")}\n";
+            statusText += $"Fixa trädgården: {(story.HarFixatTradgard ? "Klart" : "Återstår")}\n";
             return statusText;
         }
     }

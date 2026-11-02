@@ -18,6 +18,9 @@ namespace Tjanaren.Core
         private bool _isRoomMenuOpen = false;
         public bool IsRoomMenuOpen => _isRoomMenuOpen;
 
+        private bool _isExaminingObject = false;
+        public bool IsExaminingObject => _isExaminingObject;
+
         // Nytt: Hantering av föremålsval
         private bool _isSelectingItem = false;
         public bool IsSelectingItem => _isSelectingItem;
@@ -57,6 +60,11 @@ namespace Tjanaren.Core
         {
             string output = "";
 
+            if (_isExaminingObject)
+            {
+                return HanteraObjektundersokning(tangent);
+            }
+
             // Om vi är i föremålsvalsläge, hantera det först
             if (_isSelectingItem)
             {
@@ -92,8 +100,7 @@ namespace Tjanaren.Core
                     return "";
 
                 case ConsoleKey.S:
-                    output = _spelare.VisaStatus(_story);
-                    output += "\n\nTryck på valfri tangent för att återgå till rummet...";
+                    output = _spelare.VisaStatus(_story);                    
                     break;
 
                 case ConsoleKey.U:
@@ -114,11 +121,10 @@ namespace Tjanaren.Core
                     }
                     else
                     {
-                        // Öppna valsidan för flera föremål
                         _isSelectingItem = true;
                         _itemsToSelect = lista;
                         SelectedItemIndex = 0;
-                        output = "";
+                        output = VisaUpplockningsmeny(lista);
                     }
                     break;
 
@@ -129,6 +135,20 @@ namespace Tjanaren.Core
                 case ConsoleKey.M:
                     output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
                     _isRoomMenuOpen = _spelare.NuvarandeRum.HarUnderhallsmeny;
+                    break;
+
+                case ConsoleKey.O:
+                    var objekt = _spelare.NuvarandeRum.VisaObjektLista();
+
+                    if (objekt.Count == 0)
+                    {
+                        output = "Det finns inget här att undersöka.";
+                    }
+                    else
+                    {
+                        _isExaminingObject = true;
+                        output = VisaObjektmeny(objekt);
+                    }
                     break;
 
                 case ConsoleKey.UpArrow:
@@ -165,40 +185,32 @@ namespace Tjanaren.Core
 
         private string HanteraForemalsvalet(ConsoleKey tangent)
         {
-            switch (tangent)
+            if (tangent == ConsoleKey.Escape)
             {
-                case ConsoleKey.UpArrow:
-                    if (SelectedItemIndex > 0)
-                        SelectedItemIndex--;
-                    return "";
+                _isSelectingItem = false;
+                _itemsToSelect.Clear();
+                SelectedItemIndex = 0;
 
-                case ConsoleKey.DownArrow:
-                    if (SelectedItemIndex < _itemsToSelect.Count - 1)
-                        SelectedItemIndex++;
-                    return "";
-
-                case ConsoleKey.Enter:
-                    var valdSak = _itemsToSelect[SelectedItemIndex];
-                    string resultat = VerkstallUpplockning(valdSak);
-
-                    _isSelectingItem = false;
-                    _itemsToSelect.Clear();
-                    SelectedItemIndex = 0;
-
-                    return resultat;
-
-                case ConsoleKey.Escape:
-                    _isSelectingItem = false;
-                    _itemsToSelect.Clear();
-                    SelectedItemIndex = 0;
-
-                    return _spelare.NuvarandeRum.VisaBeskrivning();
-
-                default:
-                    return "";
+                return _spelare.NuvarandeRum.VisaBeskrivning();
             }
-        }
 
+            int val = (int)tangent - (int)ConsoleKey.D1;
+
+            if (val >= 0 && val < _itemsToSelect.Count)
+            {
+                var valdSak = _itemsToSelect[val];
+                string resultat = VerkstallUpplockning(valdSak);
+
+                _isSelectingItem = false;
+                _itemsToSelect.Clear();
+                SelectedItemIndex = 0;
+
+                return resultat;
+            }
+
+            return VisaUpplockningsmeny(_itemsToSelect);
+        }
+        
         private string FlyttaSpelare(string riktning)
         {
             string logg = "";
@@ -289,6 +301,55 @@ namespace Tjanaren.Core
                 return $"\nDu plockar upp {valdSak.Namn} och lägger i ryggsäcken.";
             }
             return "\nInget valdes.";
+        }
+
+        private string VisaObjektmeny(List<Spelsak> objekt)
+        {
+            string output = "Vad vill du undersöka?\n";
+
+            for (int i = 0; i < objekt.Count; i++)
+            {
+                output += $"{i + 1}. {objekt[i].Namn}\n";
+            }
+
+            output += "\nEscape för att gå tillbaka.";
+            return output;
+        }
+
+        private string VisaUpplockningsmeny(List<Spelsak> saker)
+        {
+            string output = "\nVad vill du plocka upp?\n";
+
+            for (int i = 0; i < saker.Count; i++)
+            {
+                output += $"{i + 1}. {saker[i].Namn}\n";
+            }
+
+            output += "\nEscape för att avbryta.";
+            return output;
+        }
+
+        private string HanteraObjektundersokning(ConsoleKey tangent)
+        {
+            if (tangent == ConsoleKey.Escape)
+            {
+                _isExaminingObject = false;
+                return _spelare.NuvarandeRum.VisaBeskrivning();
+            }
+
+            var objekt = _spelare.NuvarandeRum.VisaObjektLista();
+
+            int val = (int)tangent - (int)ConsoleKey.D1;
+
+            if (val >= 0 && val < objekt.Count)
+            {
+                _isExaminingObject = false;
+
+                return _spelare.NuvarandeRum.UndersokValdSak(
+                    objekt[val], _spelare);
+            }
+
+            return VisaObjektmeny(objekt);
         }
     }
 }
