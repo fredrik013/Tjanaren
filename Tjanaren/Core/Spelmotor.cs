@@ -122,11 +122,10 @@ namespace Tjanaren.Core
                     }
                     else
                     {
-                        // Öppna valsidan för flera föremål
                         _isSelectingItem = true;
                         _itemsToSelect = lista;
                         SelectedItemIndex = 0;
-                        output = "";
+                        output = VisaUpplockningsmeny(lista);
                     }
                     break;
 
@@ -187,40 +186,32 @@ namespace Tjanaren.Core
 
         private string HanteraForemalsvalet(ConsoleKey tangent)
         {
-            switch (tangent)
+            if (tangent == ConsoleKey.Escape)
             {
-                case ConsoleKey.UpArrow:
-                    if (SelectedItemIndex > 0)
-                        SelectedItemIndex--;
-                    return "";
+                _isSelectingItem = false;
+                _itemsToSelect.Clear();
+                SelectedItemIndex = 0;
 
-                case ConsoleKey.DownArrow:
-                    if (SelectedItemIndex < _itemsToSelect.Count - 1)
-                        SelectedItemIndex++;
-                    return "";
-
-                case ConsoleKey.Enter:
-                    var valdSak = _itemsToSelect[SelectedItemIndex];
-                    string resultat = VerkstallUpplockning(valdSak);
-
-                    _isSelectingItem = false;
-                    _itemsToSelect.Clear();
-                    SelectedItemIndex = 0;
-
-                    return resultat;
-
-                case ConsoleKey.Escape:
-                    _isSelectingItem = false;
-                    _itemsToSelect.Clear();
-                    SelectedItemIndex = 0;
-
-                    return _spelare.NuvarandeRum.VisaBeskrivning();
-
-                default:
-                    return "";
+                return _spelare.NuvarandeRum.VisaBeskrivning();
             }
-        }
 
+            int val = (int)tangent - (int)ConsoleKey.D1;
+
+            if (val >= 0 && val < _itemsToSelect.Count)
+            {
+                var valdSak = _itemsToSelect[val];
+                string resultat = VerkstallUpplockning(valdSak);
+
+                _isSelectingItem = false;
+                _itemsToSelect.Clear();
+                SelectedItemIndex = 0;
+
+                return resultat;
+            }
+
+            return VisaUpplockningsmeny(_itemsToSelect);
+        }
+        
         private string FlyttaSpelare(string riktning)
         {
             string logg = "";
@@ -323,6 +314,19 @@ namespace Tjanaren.Core
             }
 
             output += "\nEscape för att gå tillbaka.";
+            return output;
+        }
+
+        private string VisaUpplockningsmeny(List<Spelsak> saker)
+        {
+            string output = "\nVad vill du plocka upp?\n";
+
+            for (int i = 0; i < saker.Count; i++)
+            {
+                output += $"{i + 1}. {saker[i].Namn}\n";
+            }
+
+            output += "\nEscape för att avbryta.";
             return output;
         }
 

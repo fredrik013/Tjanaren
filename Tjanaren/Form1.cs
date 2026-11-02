@@ -86,39 +86,26 @@ namespace Tjanaren
             }
             ConsoleKey tryckt = (ConsoleKey)e.KeyCode;
 
-            // --- FÖREMÅLSVAL (NYTT) ---
-            if (motor.IsSelectingItem && lstInventory.Visible)
+            // --- NUMRERAT UP PLOCKNINGSVAL ---
+            if (motor.IsSelectingItem &&
+                !(rtbDisplay.Focused &&
+                  (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down ||
+                   e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)))
             {
-                if (tryckt == ConsoleKey.UpArrow || tryckt == ConsoleKey.DownArrow)
+                ConsoleKey menyTangent = tryckt;
+
+                if (e.KeyCode >= Keys.NumPad1 && e.KeyCode <= Keys.NumPad9)
                 {
-                    motor.HanteraInmatning(tryckt);
-                    VisaForemalsvalet();
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
+                    menyTangent = (ConsoleKey)((int)ConsoleKey.D1 +
+                        (int)(e.KeyCode - Keys.NumPad1));
                 }
 
-                if (tryckt == ConsoleKey.Enter)
-                {
-                    string resultat = motor.HanteraInmatning(tryckt);
+                string resultat = motor.HanteraInmatning(menyTangent);
+                VisaRum(resultat);
 
-                    if (!motor.IsSelectingItem)
-                    {
-                        VisaRum(resultat);
-                    }
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
-                }
-
-                if (tryckt == ConsoleKey.Escape)
-                {
-                    string resultat = motor.HanteraInmatning(tryckt);
-                    VisaRum(resultat);
-                    e.Handled = true;
-                    e.SuppressKeyPress = true;
-                    return;
-                }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
             }
 
             // --- NAVIGATION ---
@@ -231,7 +218,7 @@ namespace Tjanaren
 
                 if (motor.IsSelectingItem)
                 {
-                    VisaForemalsvalet();
+                    VisaRum(resultatKommando);
                 }
                 else if (motor.IsInventoryOpen)
                 {
