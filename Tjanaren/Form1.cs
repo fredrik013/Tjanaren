@@ -8,7 +8,7 @@ namespace Tjanaren
         RichTextBox rtbDisplay;
         ListBox lstInventory;
         ListBox lstRoomItems;
-        ListBox lstMaintenance;
+
         NavButton btnNav;
         Spelare spelare;
         Spelmotor motor;
@@ -33,14 +33,7 @@ namespace Tjanaren
                 Font = new Font("Consolas", 12),
                 TabIndex = 2
             };
-            lstMaintenance = new ListBox
-            {
-                Dock = DockStyle.Fill,
-                Visible = false,
-                Font = new Font("Consolas", 12),
-                TabIndex = 5,
-                AccessibleName = "Underhåll"
-            };
+
             lstRoomItems = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -61,7 +54,6 @@ namespace Tjanaren
             this.Controls.Add(lstRoomItems);
             this.Controls.Add(rtbDisplay);
             this.Controls.Add(btnNav);
-            this.Controls.Add(lstMaintenance);
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
 
@@ -232,23 +224,7 @@ namespace Tjanaren
                 }
             }
         }
-
-        private void VisaForemalsvalet()
-        {
-            btnNav.Visible = false;
-            rtbDisplay.Visible = false;
-            lstInventory.Visible = true;
-
-            lstInventory.Items.Clear();
-            foreach (var sak in motor.ItemsToSelect)
-            {
-                lstInventory.Items.Add(sak.Namn);
-            }
-
-            lstInventory.SelectedIndex = motor.SelectedItemIndex;
-            lstInventory.Focus();
-        }
-
+        
         private void VisaRyggsack()
         {
             btnNav.Visible = false;
@@ -280,32 +256,7 @@ namespace Tjanaren
             }
 
             lstInventory.Focus();
-        }
-
-        private void VisaUnderhall(IEnumerable<string> alternativ)
-        {
-            btnNav.Visible = false;
-            lstInventory.Visible = false;
-
-            lstMaintenance.Dock = DockStyle.Fill;
-            rtbDisplay.Dock = DockStyle.Bottom;
-            rtbDisplay.Height = 100;
-
-            rtbDisplay.Visible = true;
-            lstMaintenance.Visible = true;
-
-            lstMaintenance.Items.Clear();
-
-            foreach (string alternativText in alternativ)
-            {
-                lstMaintenance.Items.Add(alternativText);
-            }
-
-            if (lstMaintenance.Items.Count > 0)
-                lstMaintenance.SelectedIndex = 0;
-
-            lstMaintenance.Focus();
-        }
+        }           
 
         private void VisaRum(string resultat)
         {
