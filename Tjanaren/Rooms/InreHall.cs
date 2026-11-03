@@ -5,9 +5,11 @@ namespace Tjanaren.Rooms
 {
     public class InreHall : Rum
     {
-        public InreHall() : base("Hallen", "Du fortsätter längre in i hallen. Golvet här täcks av en tjock, ljus och extremt mjuk heltäckningsmatta " +
+        private readonly WorldMap _karta;
+        public InreHall(WorldMap karta) : base("Hallen", "Du fortsätter längre in i hallen. Golvet här täcks av en tjock, ljus och extremt mjuk heltäckningsmatta " +
             "som verkar suga upp allt ljud. Till vänster hörs det dämpade ljudet från en TV – det måste vara vardagsrummet.")
         {
+            _karta = karta;
             VisaNamn = "i hallen";
             OppnaUtgangar("Soder", "Vaster");
 
@@ -19,6 +21,11 @@ namespace Tjanaren.Rooms
         {
             // Vi skapar vår textbehållare
             string output = "";
+            if (story.HallenArSkurad)
+            {
+                return "\nDu ser dig omkring i den välstädade hallen. " +
+                       "Den ljusa heltäckningsmattan är nu ren och fri från smutsiga fotspår.\n";
+            }
 
             // Vi hämtar bas-beskrivningen om du vill ha med den (valfritt)
             // output += base.UndersokRum(spelare, story) + "\n";
@@ -59,6 +66,66 @@ namespace Tjanaren.Rooms
             }
 
             return output;
+        }
+
+        public override string UtforUnderhall(Spelare spelare, StoryState story)
+        {
+            var mopp = spelare.Ryggsack.GetAllaSaker()
+     .OfType<Redskap>()
+     .FirstOrDefault(r => r.Namn == "Mopp" && r.ArAktiv);
+
+            var dammsugare = spelare.Ryggsack.GetAllaSaker()
+.OfType<Redskap>()
+.FirstOrDefault(r => r.Namn == "Dammsugare" && r.ArAktiv);
+
+            var hink = spelare.Ryggsack.GetAllaSaker()
+                .OfType<Redskap>()
+                .FirstOrDefault(r => r.Namn == "Hink" && r.ArAktiv);
+
+            var vattentaligaSkor = spelare.Ryggsack.GetAllaSaker()
+    .OfType<Klader>()
+    .FirstOrDefault(k => k.ArAktiv && k.SkyddarMotVatten);
+
+            switch (true)
+            {
+                case true when story.HallenArSkurad:
+                    return "\nDu ser dig omkring i den skurade hallen. Det är inte värt att smutsa ner mattan.";
+
+                case true when !story.SkurvattenKlart:
+                    return "\nDu ser dig omkring. Det här kräver en ordentlig rengöring, men du har ännu inte gjort alla förberedelser.";
+
+                case true when vattentaligaSkor == null:
+                    return "\nDu behöver lämpliga skor som tål vatten för det här uppdraget.";
+
+                case true when hink == null:
+                    return "\nDu behöver något att ha rengöringsvattnet i. Se också till att ha utrustningen framme när du börjar.";
+
+                case true when mopp == null:
+                    return "\nDet här golvet blir inte rent av sig självt. Du behöver något lämpligt att rengöra det med, och du måste ha det framme.";
+
+                case true when dammsugare == null:
+                    return "\nDet här golvet blir inte rent av sig självt. Du behöver något lämpligt att rengöra det med, och du måste ha det framme.";
+
+                default:
+                    story.HallenArSkurad = true;
+                    mopp.ArRen = false;
+                    if (_karta.HamtaRum(new Position(-2, 1, -1))
+                        is Stadskrubb stadskrubb)
+                    {
+                        spelare.NuvarandeRum = stadskrubb;
+                        spelare.Ryggsack.GetAllaSaker().Remove(dammsugare);
+                        stadskrubb.SakerIRummet.Add(dammsugare);
+                    }
+                    return "\nDu tar itu med det omfattande städarbetet. " +
+                        "Du börjar med att dammsuga hela hallen noga. Sedan tar du itu med att skura hallen. " +
+                        "Det smutsiga vattnet skvalpar medan du arbetar dig fram över hallgolvet.\n" +
+                           "Efter ett rejält arbetspass är hallen  äntligen helt ren.\n" +
+                           "Du betraktar resultatet med tillfredsställelse. " +
+                            "Moppen däremot har sett betydligt bättre dagar. " +
+                           "Med en lättad suck släpar du ner redskapen till städskrubben.\n\n" +
+                           spelare.NuvarandeRum.VisaBeskrivning();
+
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Tjanaren.Core
             glasveranda.Plats = new Position(-2, 2, 0);
             karta.LaggTillRum(glasveranda.Plats, glasveranda);
 
-            InreHall hall2 = new InreHall();
+            InreHall hall2 = new InreHall(karta);
             hall2.Plats = new Position(0, 2, 0);
             karta.LaggTillRum(hall2.Plats, hall2);
 

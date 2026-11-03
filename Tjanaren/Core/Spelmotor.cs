@@ -133,8 +133,9 @@ namespace Tjanaren.Core
                     break;
 
                 case ConsoleKey.M:
-                    output = _spelare.NuvarandeRum.UtforUnderhall(_spelare, _story);
-                    _isRoomMenuOpen = _spelare.NuvarandeRum.HarUnderhallsmeny;
+                    var underhallsrum = _spelare.NuvarandeRum;
+                    output = underhallsrum.UtforUnderhall(_spelare, _story);
+                    _isRoomMenuOpen = underhallsrum.HarUnderhallsmeny;
                     break;
 
                 case ConsoleKey.O:
