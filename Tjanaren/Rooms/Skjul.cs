@@ -10,6 +10,12 @@ namespace Tjanaren.Rooms
             VisaNamn = "i skjulet";
             OppnaUtgangar("Vaster");
             SakerIRummet.Add(new Klader("Gummistövlar", "Ett par gamla gummistövlar som har sett bättre dagar men de skyddar nog bra mot vatten.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
+
+            SakerIRummet.Add(new Redskap(
+                "Gräsklippare",
+                "En gammal handjagare som har sett sina bästa dagar. Herr von Krångel kostar sannerligen inte på tjänstefolket några lyxredskap.",
+                arAktiv: true
+            ));
         }
     }
 }
