@@ -49,6 +49,10 @@ namespace Tjanaren.Core
             glasveranda.Plats = new Position(-2, 2, 0);
             karta.LaggTillRum(glasveranda.Plats, glasveranda);
 
+            Herrum herrum = new Herrum();
+            herrum.Plats = new Position(1, 2, 0);          
+            karta.LaggTillRum   (herrum.Plats, herrum);
+
             InreHall hall2 = new InreHall(karta);
             hall2.Plats = new Position(0, 2, 0);
             karta.LaggTillRum(hall2.Plats, hall2);
@@ -69,6 +73,10 @@ namespace Tjanaren.Core
             Pannrum pannrum = new Pannrum();
             pannrum.Plats = new Position(1, 1, -1);
             karta.LaggTillRum(pannrum.Plats, pannrum);
+
+            Tjanarbadrum tjanarbadrum = new Tjanarbadrum();
+            tjanarbadrum.Plats = new Position(0, -1, -1);
+            karta.LaggTillRum(tjanarbadrum.Plats, tjanarbadrum);
 
             Tjanarrum tjanarrum = new Tjanarrum();
             tjanarrum.Plats = new Position(0, 0, -1);
