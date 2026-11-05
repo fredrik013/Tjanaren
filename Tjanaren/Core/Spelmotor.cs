@@ -225,11 +225,12 @@ namespace Tjanaren.Core
 
                 if (hoppRum != null)
                 {
-                    if (hoppRum.KanGaIn(_spelare, _story))
+                    if (hoppRum.KanGaIn(_spelare, _story, out string rumMeddelande))
                     {
                         logg += exitText;
                         _spelare.NuvarandeRum = hoppRum;
                         logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
+                        logg += rumMeddelande;
                     }
                     return logg;
                 }
@@ -254,11 +255,12 @@ namespace Tjanaren.Core
 
                     if (nastaRum != null)
                     {
-                        if (nastaRum.KanGaIn(_spelare, _story))
+                        if (nastaRum.KanGaIn(_spelare, _story, out string rumMeddelande))
                         {
                             logg += exitText;
                             _spelare.NuvarandeRum = nastaRum;
                             logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
+                            logg += rumMeddelande;
                         }
                     }
                     else

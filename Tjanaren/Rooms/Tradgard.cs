@@ -65,8 +65,9 @@ namespace Tjanaren.Rooms
         }
 
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             // Vi matchar mot Enum-namnen
             switch (s.AktivtSkodon)
             {

@@ -12,8 +12,9 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new AllmanSak("Rör", "Ett läckande rör. Du måste ha ett verktyg för att kunna laga det.", false, false));
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             // Vi hämtar de aktiva skyddskläderna
             var aktivaSkydd = s.Ryggsack.GetAllaSaker()
                 .OfType<Klader>()

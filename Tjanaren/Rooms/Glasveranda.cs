@@ -18,8 +18,9 @@ namespace Tjanaren.Rooms
                 true)); // true betyder att den går att plocka upp om man vill
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             // Kontrollera om spelaren kommer från vardagsrummet
             if (s.NuvarandeRum is Vardagsrum v)
             {
@@ -35,7 +36,7 @@ namespace Tjanaren.Rooms
                 }
             }
 
-            return base.KanGaIn(s, story);
+            return base.KanGaIn(s, story, out meddelande);
         }
     }
 }

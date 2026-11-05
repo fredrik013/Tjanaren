@@ -24,8 +24,9 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             var aktivNyckel = s.Ryggsack.GetAllaSaker()
     .OfType<AllmanSak>()
     .FirstOrDefault(a => a.Namn == "Nyckel" && a.ArAktiv);

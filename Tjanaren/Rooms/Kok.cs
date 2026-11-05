@@ -42,8 +42,9 @@ namespace Tjanaren.Rooms
             return output;
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             // Här kollar vi om spelaren har uteskor (boots)
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {

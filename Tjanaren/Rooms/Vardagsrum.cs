@@ -17,8 +17,10 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new Inredning("Soffa", "En mjuk och pösig soffa med tjocka dynor. Undrar om den gömmer på några hemligheter."));
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
+
             // Vi behåller logiken att man faktiskt får gå in (return true),
             // men vi tar bort konsol-interaktionen och väntandet.
 
