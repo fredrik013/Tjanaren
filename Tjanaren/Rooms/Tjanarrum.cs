@@ -5,7 +5,7 @@ namespace Tjanaren.Rooms
 {
     public class Tjanarrum : Rum
     {
-        public Tjanarrum() : base("Tjänarrummet", "Du har kommit in i tjänarens rum som ligger under källartrappan. Läget speglar verkligen var finfolket anser att tjänarna hör hemma. Rummet är spartanskt inrett med en sliten tältsäng och en garderob som har sett bättre dagar.")
+        public Tjanarrum() : base("Tjänarrummet", "Du har kommit in i tjänarens rum som ligger under källartrappan. Läget speglar verkligen var finfolket anser att tjänarna hör hemma. Rummet är spartanskt inrett med en sliten tältsäng och en garderob som har sett bättre dagar. " + "En dörr leder ut till källaren men rakt fram finns också en annan dörr.")
         {
             VisaNamn = "i tjänarrummet";
             OppnaUtgangar("Norr", "Soder");

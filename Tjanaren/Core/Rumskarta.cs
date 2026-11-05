@@ -49,6 +49,10 @@ namespace Tjanaren.Core
             glasveranda.Plats = new Position(-2, 2, 0);
             karta.LaggTillRum(glasveranda.Plats, glasveranda);
 
+            Herrum herrum = new Herrum();
+            herrum.Plats = new Position(1, 2, 0);          
+            karta.LaggTillRum   (herrum.Plats, herrum);
+
             InreHall hall2 = new InreHall(karta);
             hall2.Plats = new Position(0, 2, 0);
             karta.LaggTillRum(hall2.Plats, hall2);
