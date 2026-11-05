@@ -70,6 +70,10 @@ namespace Tjanaren.Core
             pannrum.Plats = new Position(1, 1, -1);
             karta.LaggTillRum(pannrum.Plats, pannrum);
 
+            Tjanarbadrum tjanarbadrum = new Tjanarbadrum();
+            tjanarbadrum.Plats = new Position(0, -1, -1);
+            karta.LaggTillRum(tjanarbadrum.Plats, tjanarbadrum);
+
             Tjanarrum tjanarrum = new Tjanarrum();
             tjanarrum.Plats = new Position(0, 0, -1);
             karta.LaggTillRum(tjanarrum.Plats, tjanarrum);
