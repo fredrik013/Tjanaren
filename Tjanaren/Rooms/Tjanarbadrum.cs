@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tjanaren.Core;
 using Tjanaren.Modeller.Saker;
 
 namespace Tjanaren.Rooms
@@ -28,6 +29,37 @@ namespace Tjanaren.Rooms
 "På blandaren sitter en handskriven lapp: " +
 "\"VARMVATTEN KOSTAR PENGAR! /H. von Krångel\"",
                 false, false));
+        }
+
+        public override string UtforUnderhall(Spelare spelare, StoryState story)
+        {
+            var aktivaKlader = spelare.Ryggsack.GetAllaSaker()
+                .OfType<Klader>()
+                .Where(k => k.ArAktiv)
+                .ToList();
+
+            if (aktivaKlader.Any())
+            {
+                return "\nDu tänker kliva in i duschen, men inser " +
+                       "att du fortfarande har kläder på dig. " +
+                       "Det är nog bäst att ta av sig allt först.\n";
+            }
+
+            story.ArNyduschad = true;
+
+            return "\nDu kliver försiktigt in i den gamla duschen " +
+                   "och vrider på kranen. Rören protesterar med " +
+                   "ett högljutt skramlande innan en tunn stråle " +
+                   "ljummet vatten börjar rinna.\n\n" +
+                   "Du plockar upp den gamla tvålen och tvålar " +
+                   "omsorgsfullt in kroppen. Därefter lyckas du " +
+                   "pressa ut de sista dropparna ur schampoflaskan " +
+                   "och schamponerar håret.\n\n" +
+                   "Efter en ordentlig avsköljning stänger du " +
+                   "kranen och kliver ut. Trots duschens bedrövliga " +
+                   "skick känner du dig äntligen ren och fräsch.\n\n" +
+                   "Herr von Krångel skulle förmodligen kalla " +
+                   "detta ett oacceptabelt slöseri med varmvatten.\n";
         }
     }
 }
