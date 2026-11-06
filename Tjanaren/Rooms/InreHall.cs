@@ -7,11 +7,11 @@ namespace Tjanaren.Rooms
     {
         private readonly WorldMap _karta;
         public InreHall(WorldMap karta) : base("Hallen", "Du fortsätter längre in i hallen. Golvet här täcks av en tjock, ljus och extremt mjuk heltäckningsmatta " +
-            "som verkar suga upp allt ljud. Till vänster hörs det dämpade ljudet från en TV – det måste vara vardagsrummet. " + "Till höger ser du en stängd dörr av snidad ek. Antagligen leder den till ett privat rum.")
+            "som verkar suga upp allt ljud. Till vänster hörs det dämpade ljudet från en TV – det måste vara vardagsrummet. " + "Till höger ser du en stängd dörr av snidad ek. Antagligen leder den till ett privat rum. " + "Längre in i hallen finns en trappa som leder till övervåningen.")
         {
             _karta = karta;
             VisaNamn = "i hallen";
-            OppnaUtgangar("Soder", "Vaster", "Oster");
+            OppnaUtgangar("Soder", "Vaster", "Oster", "Upp");
 
             SakerIRummet.Add(new AllmanSak("Nyckel", "En rostig gammal nyckel. Undrar var den leder.", true, true)
             { ArAktiv = true });
