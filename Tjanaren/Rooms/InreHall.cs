@@ -15,6 +15,7 @@ namespace Tjanaren.Rooms
 
             SakerIRummet.Add(new AllmanSak("Nyckel", "En rostig gammal nyckel. Undrar var den leder.", true, true)
             { ArAktiv = true });
+            SakerIRummet.Add(new Inredning("Ekdörr", "Du undersöker den snidade ekdörren. Förutom det gedigna mässingshandtaget upptäcker du ett kraftigt lås. Du låter fingrarna följa de omsorgsfullt utskurna mönstren i träet.\r\n\r\nPlötsligt hörs en barsk röst från andra sidan dörren:\r\n\r\n\"Vem är det som står och tafsar på min dörr?! Har tjänstefolket verkligen inget bättre för sig?\"", false, false));
         }
 
         public override string UndersokRum(Spelare spelare, StoryState story)
