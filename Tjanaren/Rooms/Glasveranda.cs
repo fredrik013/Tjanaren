@@ -28,15 +28,11 @@ namespace Tjanaren.Rooms
 
                 if (!string.IsNullOrWhiteSpace(reaktion))
                 {
-                    MessageBox.Show(
-                        reaktion,
-                        "Vädring",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    meddelande = reaktion;                   
                 }
             }
 
-            return base.KanGaIn(s, story, out meddelande);
+            return true;
         }
     }
 }
