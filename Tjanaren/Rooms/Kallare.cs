@@ -23,21 +23,13 @@ namespace Tjanaren.Rooms
             if (s.NuvarandeRum is Hall d)
                 if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
                 {
-                    MessageBox.Show(
-                        "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +
-                        "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.",
-                        "Källaren",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    meddelande += "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +
+                    "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.";                        
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" +
-                        "Dina steg är nästan ljudlösa i tystnaden häruppe.",
-                        "Källaren",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    
+meddelande += "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" +                        "Dina steg är nästan ljudlösa i tystnaden häruppe.";                      
                 }
 
             // Spelaren får alltid komma in i källaren
