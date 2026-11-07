@@ -72,42 +72,22 @@ namespace Tjanaren.Rooms
             switch (s.AktivtSkodon)
             {
                 case var skodon when skodon == Bekladnadstyp.Inne.ToString():
-                    MessageBox.Show(
-                        "[EN STRÄNG RÖST FRÅN VERANDAN]\n\n" +
+                    meddelande += "[EN STRÄNG RÖST FRÅN VERANDAN]\n\n" +
                         $"'Men vad sysslar du med?! Gå inte ut här och skita ner dina {s.AktivtSkodonNamn}!'\n" +
-                        "'Visa lite hyfs och byt om till något som tål lera innan du sätter din fot på gräsmattan.'",
-                        "Tillträde förbjudet",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Stop);
-
+                        "'Visa lite hyfs och byt om till något som tål lera innan du sätter din fot på gräsmattan.'";
                     return false;
 
                 case var skodon when skodon == Bekladnadstyp.Ute.ToString():
-                    MessageBox.Show(
-                        $"Det klafsar till när dina {s.AktivtSkodonNamn} möter den mjuka jorden.\n" +
-                        "Du ser hur sulorna omedelbart täcks av lera.",
-                        "Trädgården",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
+                    meddelande += $"Det klafsar till när dina {s.AktivtSkodonNamn} möter den mjuka jorden.\n" +
+                                            "Du ser hur sulorna omedelbart täcks av lera.";
                     return true;
 
                 case var skodon when skodon == Bekladnadstyp.Skydd.ToString():
-                    MessageBox.Show(
-                        $"Dina {s.AktivtSkodonNamn} klafsar tryggt i leran. Det här är deras rätta element.",
-                        "Trädgården",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
+                    meddelande += $"Dina {s.AktivtSkodonNamn} klafsar tryggt i leran. Det här är deras rätta element.";
                     return true;
 
                 default:
-                    MessageBox.Show(
-                        "Du kliver ut barfota i det våta gräset. Det är kallt och klibbigt.",
-                        "Trädgården",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
+                    meddelande += "Du kliver ut barfota i det våta gräset. Det är kallt och klibbigt.";
                     return true;
             }
         }

@@ -20,14 +20,14 @@ namespace Tjanaren.Rooms
         public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
             meddelande = "";
-
-            // Vi behåller logiken att man faktiskt får gå in (return true),
-            // men vi tar bort konsol-interaktionen och väntandet.
-
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
-                // Här skulle vi i framtiden kunna trigga en flagga i storyn
-                // som gör att rummet "minns" att du smutsat ner mattan.
+                meddelande += "\n[SYSTEMMEDDELANDE: MATTVÄKTARE 1.0 AKTIVERAD]" +
+                "När du sätter foten över den fläckfria tröskeln sprakar TV:n till med ett ljud som påminner om glas som krossas." +
+                "Den raspiga rösten ekar nu direkt från bildröret, råare än i hallen:" +
+                "\n'...MINA PERSISKA MATTOR ÄR INTE TILL FÖR DINA LERIGA SULOR!...'" +
+                $"'...UT MED DIG! TA AV DIG DINA {s.AktivtSkodonNamn.ToUpper()} OCH KOM INTE TILLBAKA FÖRRÄN DU GÅR PÅ TÅ!...'" +
+                                "\nDet flimrande ljuset från skärmen tycks jaga skuggorna mot dina fötter.";
             }
 
             // Vi släpper in dem så att de får ta konsekvenserna inne i rummet
