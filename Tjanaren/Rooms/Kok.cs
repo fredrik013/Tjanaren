@@ -48,14 +48,12 @@ namespace Tjanaren.Rooms
             // Här kollar vi om spelaren har uteskor (boots)
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
             {
-                string text = "\n[SYSTEMMEDDELANDE: HYGIENKONTROLL]\n" +
+                // Visa meddelandet - JAWS fokuserar här direkt
+meddelande = "\n[SYSTEMMEDDELANDE: HYGIENKONTROLL]\n" +
                               "En röst från en dold högtalare vid köksdörren piper:\n" +
                               "'STOPP! Smutsiga uteskor detekterade i en zon för livsmedelshantering.'\n" +
                               "'Vänligen byt till inneskor i hallen innan du beträder Herrskapets kök.'\n\n" +
                               "Du kan inte gå in här med de där skorna.";
-
-                // Visa meddelandet - JAWS fokuserar här direkt
-                MessageBox.Show(text, "Hygienkontroll - Tillträde förbjudet", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 // Vi returnerar false eftersom man INTE får kliva in med uteskor
                 return false;

@@ -225,12 +225,15 @@ namespace Tjanaren.Core
 
                 if (hoppRum != null)
                 {
-                    if (hoppRum.KanGaIn(_spelare, _story, out string rumMeddelande))
+                    bool farGaIn = hoppRum.KanGaIn(_spelare, _story, out string rumMeddelande);
+
+                    logg += rumMeddelande;
+
+                    if (farGaIn)
                     {
                         logg += exitText;
                         _spelare.NuvarandeRum = hoppRum;
                         logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
-                        logg += rumMeddelande;
                     }
                     return logg;
                 }
@@ -255,12 +258,15 @@ namespace Tjanaren.Core
 
                     if (nastaRum != null)
                     {
-                        if (nastaRum.KanGaIn(_spelare, _story, out string rumMeddelande))
+                        bool farGaIn = nastaRum.KanGaIn(_spelare, _story, out string nastaRumMeddelande);
+
+                        logg += nastaRumMeddelande;
+
+                        if (farGaIn)
                         {
                             logg += exitText;
                             _spelare.NuvarandeRum = nastaRum;
                             logg += _spelare.NuvarandeRum.VisaBeskrivning(visadeExit);
-                            logg += rumMeddelande;
                         }
                     }
                     else
