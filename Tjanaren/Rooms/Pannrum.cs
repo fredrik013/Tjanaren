@@ -23,14 +23,10 @@ namespace Tjanaren.Rooms
 
             // 1. "Naken-kontrollen"
             if (!aktivaSkydd.Any())
-            {
-                MessageBox.Show(
-                    "Du kan inte gå in i pannrummet utan skyddsutrustning. " +
-                    "Det står decimeterdjupt med vatten där inne.",
-                    "Skyddsutrustning saknas",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Stop);
-
+            {               
+                    meddelande += "Du kan inte gå in i pannrummet utan skyddsutrustning. " +
+                    "Det står decimeterdjupt med vatten där inne. " +
+                    "Skyddsutrustning saknas";                    
                 return false;
             }
 
@@ -38,16 +34,13 @@ namespace Tjanaren.Rooms
             switch (true)
             {
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Fot):
-                    string text = "Du kan inte gå in där utan skydd på fötterna, det är alldeles för blött.";
-                    MessageBox.Show(text, "Du saknar skydd på fötterna!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    meddelande += "Du kan inte gå in där utan skydd på fötterna, det är alldeles för blött.";                   
                     return false;
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Helakroppen):
-                    string text2 = "Du kan inte gå in där utan skydd för hela kroppen, det är alldeles för blött.";
-                    MessageBox.Show(text2, "Du saknar skydd för kroppen!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    meddelande += "Du kan inte gå in där utan skydd för hela kroppen, det är alldeles för blött.";
                     return false;
                 case bool _ when !aktivaSkydd.Any(k => k.Placering == Kroppsdel.Hand):
-                    string text3 = "Du kan inte gå in där utan skydd på händerna, det är alldeles för blött.";
-                    MessageBox.Show(text3, "Du saknar skydd på händerna!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    meddelande += "Du kan inte gå in där utan skydd på händerna, det är alldeles för blött.";
                     return false; // Stopp direkt om något saknas
 
                 default:
