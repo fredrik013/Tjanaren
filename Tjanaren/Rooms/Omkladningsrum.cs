@@ -34,16 +34,13 @@ namespace Tjanaren.Rooms
             if (!dorrLast) return true;
             if (aktivNyckel != null)
             {
-                string text = "\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!";
-                MessageBox.Show(text, "Dörren låses upp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dorrLast = false;
+                meddelande += "\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!";
                 return true;
             }
 
             else
             {
-                string text = "Dörren är låst. Du måste ha en nyckel för att komma in.";
-                MessageBox.Show(text, "Dörren är låst", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                meddelande += "Dörren är låst. Du måste ha en nyckel för att komma in.";
                 return false;
             }
         }
