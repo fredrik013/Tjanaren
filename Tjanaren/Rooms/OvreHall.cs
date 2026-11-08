@@ -29,6 +29,12 @@ namespace Tjanaren.Rooms
                             meddelande += "Du klampar upp för trappan. Du hinner precis upp för den då en röst från en högtalare vrålar: ”VAD HAR DU HÄR UPPE ATT GÖRA?! Det här är ingen plats för tjänstefolket!”\n";
                             return false;
 
+                        case var skodon when !s.Ryggsack.GetAllaSaker()
+    .OfType<Klader>()
+    .Any(k => k.ArAktiv && k.Placering == Kroppsdel.Fot):
+                            meddelande += "Du tassar upp för trappan och hinner precis sätta fötterna på övervåningen när du hör ett vrål: ”Men herregud! Tänker du verkligen gå omkring barfota på min exklusiva matta? Dina svettiga fötter lämnar ju våta fläckar! Hela hallen stinker som en ostfabrik!”";
+                            return false;
+
                         default:
                             meddelande += "Du smyger tyst upp för trappan.\n";
                             return true;
