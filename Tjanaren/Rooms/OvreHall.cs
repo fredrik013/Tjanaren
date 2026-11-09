@@ -41,8 +41,19 @@ namespace Tjanaren.Rooms
                     }                    
 
                 case Sovrum _:
-                    meddelande += "Du smyger tyst in i den övre hallen.\n";
-                    return true;
+                    switch (s.Ryggsack.GetAllaSaker()
+                        .OfType<Klader>()
+                        .FirstOrDefault(k => k.Namn == "Sidenkalsonger"))
+                    {
+                        case Klader k when !k.ArAktiv:
+                            meddelande += "\nDu går ut från sovrummet och springer rakt i armarna på herr von Krångel. Han blir misstänksam och börjar rota i din ryggsäck. Plötsligt får han tag i de exklusiva sidenkalsongerna och utbrister: ”Vad i hela friden! Du understår dig väl inte att stjäla mina exklusiva sidenkalsonger! Det här blir en prick i tjänsteprotokollet!”";                            
+                            return true;
+
+                        default:
+                            meddelande += "\nDu går ut från sovrummet och springer rakt i armarna på herr von Krångel. Han blir misstänksam och börjar rota i din ryggsäck men hittar ingenting misstänkt där. Du hör honom muttra: ”Jävla tjänstefolk som snokar i mitt sovrum.”";
+                            return true;
+                    }
+
 
                 case VonKrangelBadrum _:
                     meddelande += "Du smyger tyst in i den övre hallen från badrummet.\n";
