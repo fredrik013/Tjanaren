@@ -113,6 +113,8 @@ namespace Tjanaren.Rooms
                     story.UtfordaUppgifter++;
                     mopp.ArRen = false;
 
+                    Beskrivning = "Du har kommit ner i källaren. Här luktar det nystädat och från pannrummet hörs ett svagt susande.";
+
                     return "\nDu tar itu med det omfattande städarbetet. " +
                            "Det smutsiga vattnet skvalpar medan du arbetar dig fram över källargolvet.\n" +
                            "Du skrubbar, skurar och kämpar dig vidare in i pannrummet, " +
