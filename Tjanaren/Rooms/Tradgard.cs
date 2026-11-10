@@ -251,6 +251,7 @@ namespace Tjanaren.Rooms
             if (fixatRabatt && klipptGras)
             {
                 story.HarFixatTradgard = true;
+                story.UtfordaUppgifter++;
                 output += "\nÄntligen! Både rabatten och gräsmattan " +
                           "är iordningställda. Trädgårdsarbetet är klart!\n";
             }

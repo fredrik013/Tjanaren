@@ -24,12 +24,12 @@ namespace Tjanaren.Rooms
                 if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
                 {
                     meddelande += "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +
-                    "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.";                        
+                    "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.";
                 }
                 else
                 {
-                    
-meddelande += "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" +                        "Dina steg är nästan ljudlösa i tystnaden häruppe.";                      
+
+                    meddelande += "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" + "Dina steg är nästan ljudlösa i tystnaden häruppe.";
                 }
 
             // Spelaren får alltid komma in i källaren
@@ -110,6 +110,7 @@ meddelande += "Du smyger ner för trappan och landar mjukt på det kalla källar
 
                 default:
                     story.HeltRentIKallaren = true;
+                    story.UtfordaUppgifter++;
                     mopp.ArRen = false;
 
                     return "\nDu tar itu med det omfattande städarbetet. " +

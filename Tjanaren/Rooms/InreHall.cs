@@ -109,6 +109,7 @@ namespace Tjanaren.Rooms
 
                 default:
                     story.HallenArSkurad = true;
+                    story.UtfordaUppgifter++;
                     mopp.ArRen = false;
                     if (_karta.HamtaRum(new Position(-2, 1, -1))
                         is Stadskrubb stadskrubb)

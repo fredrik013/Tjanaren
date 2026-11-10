@@ -89,6 +89,7 @@ namespace Tjanaren.Rooms
             {
                 // Framgång!
                 story.RorArLagat = true;
+story.UtfordaUppgifter++;
 
                 // Vi uppdaterar rumsbeskrivningen permanent
                 Beskrivning = "Ett nu tyst och varmt pannrum. Röret är lagat och ångan har lagt sig.";
