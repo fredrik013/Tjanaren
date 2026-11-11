@@ -35,8 +35,12 @@ namespace Tjanaren.Modeller.Saker
                     break;
 
                 case Livsmedelstyp.Sprit:
+                    story.HarDruckitSprit = true;
                     story.AntalOvertramp++;
-                    break;
+                    return "Du öppnar flaskan och tar en klunk. " +
+                           "Du hinner knappt svälja innan herr von Krångel dyker upp. " +
+                           "\"Vad i hela helvete tar du dig till?! " +
+                           "Du understår dig väl inte till att dricka upp min finaste whisky!\"";
 
                 default:
                     break;
