@@ -67,8 +67,8 @@ namespace Tjanaren.Rooms
                             meddelande += "\nDu går ut från badrummet och springer rakt i armarna på herr von Krångel. Han ser på dig med arga ögon och utbrister: ”Vad i hela friden! Du understår dig väl inte att använda min exklusiva rakhyvel! Tjänstefolk har ett eget badrum och de får själva hålla sig med rakdon! Det här blir en prick i tjänsteprotokollet!” Herr von Krångel tar ifrån dig rakhyveln och går med arga steg in i badrummet med den, muttrande för sig själv: ”Det är märkligt att inte tjänstefolket kan lämna mina saker i fred!”";
                             s.Ryggsack.GetAllaSaker().Remove(a);
                             vonKrangelBadrum.SakerIRummet.Add(a);
+                            story.TagitRakhyvel = true;
                             return true;
-
 
                         default:
                             meddelande += "\nDu går ut från badrummet och springer rakt i armarna på herr von Krångel. Han tittar misstänksamt på din ryggsäck. Du hör honom muttra: ”Jävla tjänstefolk som snokar i mitt badrum.”";

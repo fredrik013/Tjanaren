@@ -67,6 +67,18 @@ namespace Tjanaren.Rooms
                     case 4 when story.StinkandeHall == true:
                     meddelande += "”Nu har tjänaren visat att han har riktigt dåligt omdöme. Häromdagen kände jag att övre hallen stank som värsta ostfabriken! När jag kom upp upptäckte jag att tjänaren hade den dåliga smaken att knalla omkring där barfota och fläcka ner min fina matta!”";
                     break;
+
+                    case 5 when story.HarAnvantSpabad && story.TagitRakhyvel == true:
+                    meddelande += "”Jag vet inte vad jag ska ta mig till med den här tjänaren. Det verkar inte finnas några gränser för vad han tar sig till! Häromdagen ertappade jag honom med att ligga och slappa i mitt spabad. Och som om inte det vore nog hade han mage att ta min exklusiva rakhyvel och använda den också!”";
+                    break;
+
+                    case 6 when story.HarAnvantSpabad = true;
+                    meddelande += "”Häromdagen ertappade jag tjänaren med att ligga och slappa i mitt fina spabad. Med tanke på hur han sköter sin hygien vill jag inte ens tänka på vilket jobb jag får med att sanera det! Jag hotade med att låta honom följa med vattnet ner i avloppet!” " + "”Men min vän, hur tänker du egentligen? Hur ska tjänaren kunna duscha och sköta sin hygien om han inte ens får använda spabadet?” " + "”Det finns faktiskt en dusch i källaren som han kan använda!”" + "”Den där gamla sunkiga duschen? Jag förstår om du inte får behålla din personal!”";
+                    break;
+
+                    case 7 when story.TagitRakhyvel == true:
+                    meddelande += "”Jag börjar verkligen undra vad det är för en tjänare jag har anställt! Häromdagen upptäckte jag att han hade tagit min exklusiva rakhyvel och använt den! Man kan tydligen inte ens lämna sina personliga tillhörigheter obevakade i det här huset!”";
+                    break;
             }
 
             Tjuvlyssnat++;
