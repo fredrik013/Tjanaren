@@ -32,6 +32,8 @@
 
         public bool HarAnvantSpabad { get; set; } = false;
 
+        public bool TagitRakhyvel { get; set; } = false;
+
         public bool HarBlivitVarnadOmRor { get; set; } = false;
 
         public bool HarBlivitUtskalldHallen { get; set; } = false;
@@ -41,5 +43,7 @@
         public bool HarAtitBrod { get; set; } = false;
 
         public bool HarDruckitSprit { get; set; } = false;
+
+        public bool StinkandeHall { get; set; } = false;
     }
 }

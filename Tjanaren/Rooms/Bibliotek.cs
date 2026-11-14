@@ -55,6 +55,18 @@ namespace Tjanaren.Rooms
                                  "ÄR DET DU?! STÅR DU OCH TJUVLYSSNAR PÅ " +
                                  "MINA PRIVATA TELEFONSAMTAL?! HAR DU INGET " +
                                  "ARBETE ATT UTFÖRA?!";
+
+                    case 2 when story.HarDruckitSprit == true:
+                    meddelande += "”Jag tror att jag har anställt en alkoholist. Här om dagen tog jag tjänaren på bar gärning med att dricka av min finaste whisky!”";
+                    break;
+
+                case 3 when story.HallenArSkurad == false:
+                    meddelande += "”Tjänarna tror tydligen, trots upprepade tillsägelser, att de kan klampa runt hur som helst med sina skitiga skor! Den jag har anställt nu klampade rakt in på den fina mattan i inre hallen, men inte ens efter det har han bemödat sig med att städa upp efter sig!”";
+                    break;
+
+                    case 4 when story.StinkandeHall == true:
+                    meddelande += "”Nu har tjänaren visat att han har riktigt dåligt omdöme. Häromdagen kände jag att övre hallen stank som värsta ostfabriken! När jag kom upp upptäckte jag att tjänaren hade den dåliga smaken att knalla omkring där barfota och fläcka ner min fina matta!”";
+                    break;
             }
 
             Tjuvlyssnat++;

@@ -33,6 +33,7 @@ namespace Tjanaren.Rooms
     .OfType<Klader>()
     .Any(k => k.ArAktiv && k.Placering == Kroppsdel.Fot):
                             meddelande += "Du tassar upp för trappan och hinner precis sätta fötterna på övervåningen när du hör ett vrål: ”Men herregud! Tänker du verkligen gå omkring barfota på min exklusiva matta? Dina svettiga fötter lämnar ju våta fläckar! Hela hallen stinker som en ostfabrik!”";
+                            story.StinkandeHall = true;
                             return false;
 
                         default:
