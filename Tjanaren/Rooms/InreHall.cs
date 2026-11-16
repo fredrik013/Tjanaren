@@ -7,14 +7,15 @@ namespace Tjanaren.Rooms
     {
         private readonly WorldMap _karta;
         public InreHall(WorldMap karta) : base("Hallen", "Du fortsätter längre in i hallen. Golvet här täcks av en tjock, ljus och extremt mjuk heltäckningsmatta " +
-            "som verkar suga upp allt ljud. Till vänster hörs det dämpade ljudet från en TV – det måste vara vardagsrummet. " + "Till höger ser du en stängd dörr av snidad ek. Antagligen leder den till ett privat rum.")
+            "som verkar suga upp allt ljud. Till vänster hörs det dämpade ljudet från en TV – det måste vara vardagsrummet. " + "Till höger ser du en stängd dörr av snidad ek. Antagligen leder den till ett privat rum. " + "Längre in i hallen finns en trappa som leder till övervåningen.")
         {
             _karta = karta;
             VisaNamn = "i hallen";
-            OppnaUtgangar("Soder", "Vaster", "Oster");
+            OppnaUtgangar("Soder", "Vaster", "Oster", "Upp");
 
             SakerIRummet.Add(new AllmanSak("Nyckel", "En rostig gammal nyckel. Undrar var den leder.", true, true)
             { ArAktiv = true });
+            SakerIRummet.Add(new Inredning("Ekdörr", "Du undersöker den snidade ekdörren. Förutom det gedigna mässingshandtaget upptäcker du ett kraftigt lås. Du låter fingrarna följa de omsorgsfullt utskurna mönstren i träet.\r\n\r\nPlötsligt hörs en barsk röst från andra sidan dörren:\r\n\r\n\"Vem är det som står och tafsar på min dörr?! Har tjänstefolket verkligen inget bättre för sig?\"", false, false));
         }
 
         public override string UndersokRum(Spelare spelare, StoryState story)
@@ -108,6 +109,7 @@ namespace Tjanaren.Rooms
 
                 default:
                     story.HallenArSkurad = true;
+                    story.UtfordaUppgifter++;
                     mopp.ArRen = false;
                     if (_karta.HamtaRum(new Position(-2, 1, -1))
                         is Stadskrubb stadskrubb)

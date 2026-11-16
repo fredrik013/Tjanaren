@@ -90,6 +90,23 @@ namespace Tjanaren.Core
             stadskrubb.Plats = new Position(-2, 1, -1);
             karta.LaggTillRum(stadskrubb.Plats, stadskrubb);
 
+            // Övre våningen
+            Bibliotek bibliotek = new Bibliotek();
+                        bibliotek.Plats = new Position(1, 2, 1);
+            karta.LaggTillRum(bibliotek.Plats, bibliotek);
+
+            OvreHall ovreHall = new OvreHall();
+            ovreHall.Plats = new Position(0, 2, 1);
+            karta.LaggTillRum(ovreHall.Plats, ovreHall);
+
+            Sovrum sovrum = new Sovrum();   
+            sovrum.Plats = new Position(-1, 2, 1);
+            karta.LaggTillRum(sovrum.Plats, sovrum);
+
+            VonKrangelBadrum vonKrangelBadrum = new VonKrangelBadrum();
+            vonKrangelBadrum.Plats = new Position(0, 3, 1);
+            karta.LaggTillRum(vonKrangelBadrum.Plats, vonKrangelBadrum);
+
             return gardsplan;
         }
     }

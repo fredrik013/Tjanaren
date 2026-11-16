@@ -24,8 +24,9 @@ namespace Tjanaren.Rooms
             SakerIRummet.Add(new Klader("Plasttofflor", "Ett par blå plasttofflor. De ser ut att tåla både fukt och smuts.", Bekladnadstyp.Skydd, Kroppsdel.Fot, BekladnadsLager.Mellan, true, true, false));
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             var aktivNyckel = s.Ryggsack.GetAllaSaker()
     .OfType<AllmanSak>()
     .FirstOrDefault(a => a.Namn == "Nyckel" && a.ArAktiv);
@@ -33,16 +34,13 @@ namespace Tjanaren.Rooms
             if (!dorrLast) return true;
             if (aktivNyckel != null)
             {
-                string text = "\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!";
-                MessageBox.Show(text, "Dörren låses upp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dorrLast = false;
+                meddelande += "\nDu sticker in den rostiga nyckeln i låset. Det gnisslar till, men dörren går upp!";
                 return true;
             }
 
             else
             {
-                string text = "Dörren är låst. Du måste ha en nyckel för att komma in.";
-                MessageBox.Show(text, "Dörren är låst", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                meddelande += "Dörren är låst. Du måste ha en nyckel för att komma in.";
                 return false;
             }
         }

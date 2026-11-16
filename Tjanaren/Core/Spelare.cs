@@ -81,6 +81,8 @@ namespace Tjanaren.Core
             // Hitta aktiva kläder i ryggsäcken
             var allaKlader = Ryggsack.GetAllaSaker().OfType<Klader>().Where(k => k.ArAktiv).ToList();
 
+            statusText += "\n--- Du har följande kläder på dig ---\n";
+
             string huvud = allaKlader.FirstOrDefault(k => k.Placering == Kroppsdel.Huvud)?.Namn ?? "inget";
             string hander = allaKlader.FirstOrDefault(k => k.Placering == Kroppsdel.Hand)?.Namn ?? "inget";
 
@@ -105,11 +107,12 @@ namespace Tjanaren.Core
             statusText += $"På fötterna: {fotter}\n";
 
             statusText += "------------------\n";
-            statusText += "\n--- UPPDRAGSSTATUS ---\n";
+            statusText += "\n--- Uppdragsstatus ---\n";
             statusText += $"Laga röret: {(story.RorArLagat ? "Klart" : "Återstår")}\n";
             statusText += $"Städa hallen: {(story.HallenArSkurad ? "Klart" : "Återstår")}\n";
             statusText += $"Städa källaren: {(story.HeltRentIKallaren ? "Klart" : "Återstår")}\n";
             statusText += $"Fixa trädgården: {(story.HarFixatTradgard ? "Klart" : "Återstår")}\n";
+            statusText += $"\nAntal övertramp: {story.AntalOvertramp} av 3\n";
             return statusText;
         }
     }

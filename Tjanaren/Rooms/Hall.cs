@@ -19,25 +19,21 @@ namespace Tjanaren.Rooms
                 "Du ser en person som ser ut att ha sovit för lite och jobbat för mycket. En liten lortfläck på din kind lyser som en varningslampa – Herrskapet kommer få ett utbrott om de ser den."));
         }
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";          
             // Vi kollar om spelaren har boots OCH om huset inte redan skällt ut dem
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString() && !story.HarBlivitUtskalldHallen)
-            {
-                string text = "\n[SYSTEMMEDDELANDE: SMUTS-DETEKTOR AKTIVERAD]\n" +
+            {                    
+                // Nu sätter vi flaggan så huset håller tyst nästa gång (men smutsen är kvar)
+
+                meddelande += "\n[SYSTEMMEDDELANDE: SMUTS-DETEKTOR AKTIVERAD]\n" +
                     "En gäll, metallisk röst ekar från taket:\n" +
                     "'STOPP! Obehörig smuts detekterad på Herrskapet Von Krångels parkett!'\n" +
                     "'Noll-tolerans råder. Sanering krävs omedelbart, tjänare!'\n\n" +
-                    "Du känner hur nackhåren reser sig. Det här huset verkar ha ögon överallt.\n\n" +
-                    "Tryck OK för att kliva in...";
-
-                // Visa modal dialog i WinForms istället för Console.ReadKey
-                MessageBox.Show(text, "Varning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                // Nu sätter vi flaggan så huset håller tyst nästa gång (men smutsen är kvar)
+                    "Du känner hur nackhåren reser sig. Det här huset verkar ha ögon överallt.\n\n";
                 story.HarBlivitUtskalldHallen = true;
             }
-
             return true;
         }
 

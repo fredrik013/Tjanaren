@@ -180,8 +180,9 @@ namespace Tjanaren.Rooms
             return "Det verkar inte vara något som sticker ut just nu vid en snabb anblick.";
         }
 
-        public virtual bool KanGaIn(Spelare s, StoryState story)
+        public virtual bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             return true; // Standard: Alla får komma in!
         }
 

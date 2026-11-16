@@ -17,27 +17,20 @@ namespace Tjanaren.Rooms
         }
 
 
-        public override bool KanGaIn(Spelare s, StoryState story)
+        public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
+            meddelande = "";
             if (s.NuvarandeRum is Hall d)
                 if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString())
-            {
-                MessageBox.Show(
-                    "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +
-                    "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.",
-                    "Källaren",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" +
-                    "Dina steg är nästan ljudlösa i tystnaden häruppe.",
-                    "Källaren",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
+                {
+                    meddelande += "Dånandet från dina tunga steg i trappan ekar fortfarande mellan källarväggarna.\n" +
+                    "Det fuktiga betonggolvet här nere verkar nästan vibrera av oväsendet.";
+                }
+                else
+                {
+
+                    meddelande += "Du smyger ner för trappan och landar mjukt på det kalla källargolvet.\n" + "Dina steg är nästan ljudlösa i tystnaden häruppe.";
+                }
 
             // Spelaren får alltid komma in i källaren
             return true;
@@ -117,7 +110,10 @@ namespace Tjanaren.Rooms
 
                 default:
                     story.HeltRentIKallaren = true;
+                    story.UtfordaUppgifter++;
                     mopp.ArRen = false;
+
+                    Beskrivning = "Du har kommit ner i källaren. Här luktar det nystädat och från pannrummet hörs ett svagt susande.";
 
                     return "\nDu tar itu med det omfattande städarbetet. " +
                            "Det smutsiga vattnet skvalpar medan du arbetar dig fram över källargolvet.\n" +
