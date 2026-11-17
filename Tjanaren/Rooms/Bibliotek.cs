@@ -48,7 +48,22 @@ namespace Tjanaren.Rooms
 
                 case 1 when story.HarFixatTradgard == true:
                     Tjuvlyssnat++;
-                    return meddelande +=
+                                            story.AntalOvertramp++;
+                        if (Tjuvlyssnat == 3)
+                        {
+                            TelefonLast = true;
+                            story.AntalOvertramp++;
+
+                            return meddelande += "\n\nPlötsligt hör du steg bakom dig. " +
+                                "Herr von Krångel har smugit sig fram " +
+                                "med sin trådlösa telefon och ertappar dig!\n\n" +
+                                "”JAG HOPPAS VERKLIGEN ATT DU HAR EN BRA FÖRKLARING! " +
+                                "DET HÄR ÄR ETT ALLVARLIGT ÖVERTRAMP! " +
+                                "Jag tänker anteckna det här i protokollet. " +
+                                "Du får en prick för ditt tilltag, och jag förväntar mig " +
+                                "att det inte upprepas!”";
+                        }
+                        return meddelande +=
                         "”Du skulle ha hört vilket förskräckligt oväsen " +
                         "det var från trädgården när tjänaren klippte gräset!”\n\n" +
                         "”Jaså, har du fortfarande kvar den gamla handjagaren? " +

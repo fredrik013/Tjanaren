@@ -50,6 +50,7 @@ namespace Tjanaren.Rooms
                             meddelande += "\nDu går ut från sovrummet och springer rakt i armarna på herr von Krångel. Han blir misstänksam och börjar rota i din ryggsäck. Plötsligt får han tag i de exklusiva sidenkalsongerna och utbrister: ”Vad i hela friden! Du understår dig väl inte att stjäla mina exklusiva sidenkalsonger! Det här blir en prick i tjänsteprotokollet!” Herr von Krångel tar sidenkalsongerna ur ryggsäcken och går med arga steg in i sovrummet med dem, muttrande för sig själv: ”Det är märkligt att inte tjänstefolket kan lämna mina saker i fred!”";
                             s.Ryggsack.GetAllaSaker().Remove(k);
                             sovrum.SakerIRummet.Add(k);
+                            story.AntalOvertramp++;
                             return true;
 
 
@@ -68,6 +69,7 @@ namespace Tjanaren.Rooms
                             s.Ryggsack.GetAllaSaker().Remove(a);
                             vonKrangelBadrum.SakerIRummet.Add(a);
                             story.TagitRakhyvel = true;
+                            story.AntalOvertramp++;
                             return true;
 
                         default:

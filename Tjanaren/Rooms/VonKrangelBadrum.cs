@@ -22,6 +22,7 @@ namespace Tjanaren.Rooms
         public override string UtforUnderhall(Spelare spelare, StoryState story)
         {
             story.HarAnvantSpabad = true;
+            story.AntalOvertramp++;
 
             return "\nDu bestämmer dig för att unna dig ett riktigt " +
        "lyxigt bad. Du börjar med att tappa upp vatten i " +
