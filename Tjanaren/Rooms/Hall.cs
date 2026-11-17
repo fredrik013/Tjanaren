@@ -1,10 +1,12 @@
-﻿using Tjanaren.Core;
+﻿using NetCoreAudio;
+using Tjanaren.Core;
 using Tjanaren.Modeller.Saker;
 
 namespace Tjanaren.Rooms
 {
     public class Hall : Rum
     {
+        private readonly Player _ljudspelare = new Player();
         public Hall() : base("Hallen",
                     "Du kliver in i en hemtrevlig hall. Det doftar svagt av såpa och gammalt trä. " +
         "På väggen hänger en spegel och under den står en skohylla. " +
@@ -21,7 +23,10 @@ namespace Tjanaren.Rooms
 
         public override bool KanGaIn(Spelare s, StoryState story, out string meddelande)
         {
-            meddelande = "";          
+            meddelande = "";
+
+            if (s.NuvarandeRum is Gardsplan)
+                _ = _ljudspelare.Play(Path.Combine(AppContext.BaseDirectory, "Ljudeffekter", "DoorOpening.mp3"));
             // Vi kollar om spelaren har boots OCH om huset inte redan skällt ut dem
             if (s.AktivtSkodon == Bekladnadstyp.Ute.ToString() && !story.HarBlivitUtskalldHallen)
             {                    
