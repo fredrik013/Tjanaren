@@ -48,7 +48,6 @@ namespace Tjanaren.Rooms
 
                 case 1 when story.HarFixatTradgard == true:
                     Tjuvlyssnat++;
-                                            story.AntalOvertramp++;
                         if (Tjuvlyssnat == 3)
                         {
                             TelefonLast = true;
